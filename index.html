@@ -1,1 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Geweldige Website</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Zijbalk / Menu (zoals op de tekening) */
+        nav {
+            width: 220px;
+            background-color: #ffffff;
+            border-right: 3px solid #333;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        nav button {
+            background-color: #ffffff;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 15px 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            box-shadow: 2px 2px 0px #333;
+        }
+
+        nav button:hover {
+            background-color: #ffe600;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px #333;
+        }
+
+        nav button.active {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        /* Hoofd-inhoud */
+        main {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* De grote cirkel/ovaal uit het ontwerp */
+        .main-oval {
+            width: 100%;
+            max-width: 800px;
+            min-height: 500px;
+            background-color: #ffffff;
+            border: 4px solid #333;
+            border-radius: 50% / 40%;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        /* Stijlen voor de spelletjes */
+        .game-box {
+            background: #eef7ff;
+            border: 2px dashed #0288d1;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+
+        .btn-game {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .btn-game:hover {
+            background: #e68a00;
+        }
+
+        #catcher-game-area {
+            width: 100%;
+            height: 200px;
+            background: #e0f7fa;
+            border: 2px solid #0097a7;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        #basket {
+            width: 60px;
+            height: 20px;
+            background: #ff5722;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        #drop {
+            width: 15px;
+            height: 15px;
+            background: #0288d1;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigatiemenu op basis van het papier -->
+    <nav>
+        <button onclick="showPage('over-mij')" class="active">Over mij</button>
+        <button onclick="showPage('weer')">Weer</button>
+        <button onclick="showPage('spelletjes')">Spelletjes</button>
+    </nav>
+
+    <!-- Hoofdgedeelte in een ovale vorm -->
+    <main>
+        <div class="main-oval">
+            
+            <!-- PAGINA 1: OVER MIJ -->
+            <div id="over-mij" class="page active">
+                <h1>👋 Over Mij</h1>
+                <p>Welkom op mijn eigen website!</p>
+                <p>Ik ben de maker van deze site. Ik hou van het bedenken van toffe ideeën, tekenen, spelletjes spelen en het weer ontdekken!</p>
+                <p>Dankzij mijn getekende ontwerp kun je nu door de verschillende pagina's klikken in het menu hiernaast.</p>
+            </div>
+
+            <!-- PAGINA 2: WEER -->
+            <div id="weer" class="page">
+                <h1>☀️ Het Weer</h1>
+                <p>Bekijk hier hoe het weer er vandaag uitziet!</p>
+                <div style="font-size: 50px; margin: 15px 0;">🌤️ 21°C</div>
+                <p><strong>Verwachting:</strong> Licht bewolkt met af en toe zon. Perfect weer om lekker buiten een spelletje te spelen!</p>
+            </div>
+
+            <!-- PAGINA 3: SPELLETJES -->
+            <div id="spelletjes" class="page">
+                <h1>🎮 Spelletjes</h1>
+                <p>Kies een spelletje om te spelen:</p>
+
+                <!-- Spel 1 -->
+                <div class="game-box">
+                    <h3>Spel 1: Weer Quiz ❓</h3>
+                    <p id="quiz-question">Wat valt er uit de lucht als het heel koud is en vriest?</p>
+                    <button class="btn-game" onclick="checkQuiz('Regen')">Regen</button>
+                    <button class="btn-game" onclick="checkQuiz('Sneeuw')">Sneeuw</button>
+                    <button class="btn-game" onclick="checkQuiz('Zonnestralen')">Zonnestralen</button>
+                    <p id="quiz-result" style="margin-top:10px; font-weight:bold;"></p>
+                </div>
+
+                <!-- Spel 2 -->
+                <div class="game-box" style="margin-top:20px;">
+                    <h3>Spel 2: Vang de Regendruppel 🌧️</h3>
+                    <p>Score: <span id="score">0</span></p>
+                    <div id="catcher-game-area" onmousemove="moveBasket(event)">
+                        <div id="drop"></div>
+                        <div id="basket"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Navigatie functie
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(pageId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (pageId === 'spelletjes') {
+                resetCatcherGame();
+            }
+        }
+
+        // Spel 1: Quiz Logic
+        function checkQuiz(answer) {
+            const result = document.getElementById('quiz-result');
+            if (answer === 'Sneeuw') {
+                result.innerText = "🎉 Goed geraden! Het is Sneeuw!";
+                result.style.color = "green";
+            } else {
+                result.innerText = "❌ Jammer, probeer het nog een keer!";
+                result.style.color = "red";
+            }
+        }
+
+        // Spel 2: Vang de regendruppel Logic
+        let score = 0;
+        let dropY = 0;
+        let dropX = Math.random() * 260;
+        let basketX = 120;
+        let gameInterval;
+
+        function moveBasket(e) {
+            const rect = document.getElementById('catcher-game-area').getBoundingClientRect();
+            basketX = e.clientX - rect.left - 30;
+            if (basketX < 0) basketX = 0;
+            if (basketX > 240) basketX = 240;
+            document.getElementById('basket').style.left = basketX + 'px';
+        }
+
+        function resetCatcherGame() {
+            score = 0;
+            document.getElementById('score').innerText = score;
+            dropY = 0;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(updateGame, 20);
+        }
+
+        function updateGame() {
+            dropY += 3;
+            const drop = document.getElementById('drop');
+            if (dropY > 180) {
+                if (dropX > basketX - 15 && dropX < basketX + 60) {
+                    score++;
+                    document.getElementById('score').innerText = score;
+                }
+                dropY = 0;
+                dropX = Math.floor(Math.random() * 260);
+            }
+            drop.style.top = dropY + 'px';
+            drop.style.left = dropX + 'px';
+        }
+    </script>
+</body>
+</html>
