@@ -6,75 +6,74 @@
     <title>Mijn Website</title>
     <style>
         :root {
-            --accent-color: #0284c7;
-            --accent-hover: #0369a1;
-            --accent-light: rgba(56, 189, 248, 0.25);
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
+            --accent-bg: rgba(56, 189, 248, 0.15);
             --bg-gradient: radial-gradient(circle at 20% 20%, #f8fafc 0%, #e2e8f0 100%);
-            --text-main: #0f172a;
-            --text-sub: #475569;
             --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-card: rgba(255, 255, 255, 0.5);
+            --glass-card: rgba(255, 255, 255, 0.65);
             --glass-border: rgba(255, 255, 255, 0.7);
-            --nav-btn-bg: rgba(255, 255, 255, 0.3);
-            --shadow-color: rgba(0, 0, 0, 0.05);
+            --text-color: #0f172a;
+            --subtext-color: #475569;
+            --nav-bg: rgba(255, 255, 255, 0.4);
         }
 
-        /* Dark Mode Variabelen */
-        body.dark-theme {
+        body.dark-mode {
             --bg-gradient: radial-gradient(circle at 20% 20%, #0f172a 0%, #020617 100%);
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
             --glass-bg: rgba(15, 23, 42, 0.55);
-            --glass-card: rgba(30, 41, 59, 0.6);
+            --glass-card: rgba(30, 41, 59, 0.7);
             --glass-border: rgba(255, 255, 255, 0.15);
-            --nav-btn-bg: rgba(30, 41, 59, 0.4);
-            --shadow-color: rgba(0, 0, 0, 0.3);
+            --text-color: #f8fafc;
+            --subtext-color: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.5);
         }
 
-        /* Achtergrond patronen & animaties */
         body.bg-pattern {
-            background-image: radial-gradient(var(--text-sub) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
             background-size: 20px 20px;
         }
 
-        @keyframes animatedBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body.dark-mode.bg-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
         }
 
         body.bg-animated {
             background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
             background-size: 400% 400%;
-            animation: animatedBg 12s ease infinite;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
         body {
             background: var(--bg-gradient);
-            color: var(--text-main);
+            color: var(--text-color);
             display: flex;
             min-height: 100vh;
-            overflow-x: hidden;
-            transition: background 0.5s ease, color 0.5s ease;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
         }
 
-        /* Navigatiebalk */
+        /* Navigatiebalk links */
         nav {
-            width: 260px;
-            background: var(--glass-bg);
+            width: 240px;
+            background: var(--nav-bg);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-right: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px var(--shadow-color);
-            padding: 30px 18px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -82,8 +81,8 @@
         }
 
         nav button {
-            background: var(--nav-btn-bg);
-            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(10px);
             padding: 14px 18px;
@@ -91,7 +90,7 @@
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s ease;
             text-align: left;
             display: flex;
             align-items: center;
@@ -99,17 +98,143 @@
         }
 
         nav button:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-1px);
         }
 
         nav button.active {
-            background: var(--accent-light);
-            color: var(--accent-color);
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.15);
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
         }
 
+        /* Instellingen-knop Rechtsboven */
+        .settings-top-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: var(--glass-card);
+            color: var(--text-color);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            z-index: 90;
+        }
+
+        .settings-top-btn:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Overzichtelijk Instellingen Paneel (Flyout Modal) */
+        .settings-modal-overlay {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: flex-end;
+            z-index: 100;
+        }
+
+        .settings-modal-overlay.active {
+            display: flex;
+        }
+
+        .settings-panel {
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            background: var(--glass-card);
+            backdrop-filter: blur(30px) saturate(190%);
+            -webkit-backdrop-filter: blur(30px) saturate(190%);
+            border-left: 1px solid var(--glass-border);
+            padding: 30px;
+            overflow-y: auto;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .settings-section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .setting-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .setting-row label {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.25);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .color-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.15);
+        }
+
+        /* Layout Hoofdinhoud */
         main {
             flex: 1;
             padding: 40px;
@@ -118,11 +243,10 @@
             align-items: center;
         }
 
-        /* Glazen Ovaal */
         .main-oval {
             width: 100%;
-            max-width: 840px;
-            min-height: 560px;
+            max-width: 850px;
+            min-height: 540px;
             background: var(--glass-bg);
             backdrop-filter: blur(30px) saturate(190%);
             -webkit-backdrop-filter: blur(30px) saturate(190%);
@@ -134,7 +258,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 30px 60px var(--shadow-color);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
         }
 
         .page {
@@ -147,14 +271,13 @@
         }
 
         h1 {
-            color: var(--text-main);
             margin-bottom: 12px;
             font-size: 2.2rem;
             font-weight: 700;
         }
 
         p {
-            color: var(--text-sub);
+            color: var(--subtext-color);
             font-size: 1.05rem;
             line-height: 1.6;
             margin-bottom: 15px;
@@ -164,266 +287,239 @@
             background: var(--glass-card);
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(16px);
-            padding: 22px;
+            padding: 20px;
             border-radius: 20px;
             margin-top: 15px;
-            box-shadow: 0 10px 25px var(--shadow-color);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
             text-align: left;
         }
 
-        /* Formulieren & Instellingen Elementen */
-        .setting-group {
-            margin-bottom: 15px;
-        }
-
-        .setting-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-        }
-
-        .setting-group input[type="text"], .setting-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.5);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            outline: none;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 10px;
-        }
-
-        .color-btn {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            border: 2px solid white;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        /* Weer Grid */
-        .weather-section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-sub);
-            margin: 10px 0 6px 0;
-            font-weight: 700;
-        }
-
+        /* Weer Layout */
         .weather-grid {
             display: flex;
             justify-content: space-around;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-top: 10px;
         }
 
         .weather-item {
             flex: 1;
-            background: var(--nav-btn-bg);
-            padding: 12px 8px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 10px;
+            border-radius: 14px;
             border: 1px solid var(--glass-border);
             font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-main);
             text-align: center;
         }
 
-        /* Arcade Game Styles */
+        /* Game UI */
         #game-container {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 220px;
             background: rgba(0, 0, 0, 0.05);
             border-radius: 16px;
             border: 1px solid var(--glass-border);
             overflow: hidden;
             margin-top: 10px;
-            cursor: none;
         }
 
-        #basket {
-            width: 60px;
-            height: 14px;
-            background: var(--accent-color);
+        .paddle {
+            height: 12px;
             position: absolute;
             bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-radius: 6px;
         }
+
+        #paddle1 { width: 50px; background: #0284c7; left: 20%; }
+        #paddle2 { width: 50px; background: #f97316; left: 70%; }
 
         .game-object {
             position: absolute;
-            font-size: 20px;
-            user-select: none;
-            line-height: 1;
-        }
-
-        .game-stats {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 700;
-            color: var(--text-main);
-            font-size: 1.05rem;
+            font-size: 18px;
         }
 
         .btn-action {
-            background: var(--accent-color);
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 22px;
-            border-radius: 20px;
+            padding: 10px 20px;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.2s ease;
             margin-top: 10px;
         }
 
         .btn-action:hover {
-            background: var(--accent-hover);
-            transform: scale(1.02);
+            background: var(--primary-hover);
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .leaderboard-list li {
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.15);
+            margin-bottom: 4px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigatiebalk met Instellingen bovenaan -->
+    <!-- Knop Rechtsboven voor Instellingen -->
+    <button class="settings-top-btn" onclick="toggleSettingsModal()">
+        <span>⚙️</span> Instellingen
+    </button>
+
+    <!-- Navigatiebalk -->
     <nav>
-        <button onclick="showPage('instellingen', event)" class="active"><span>⚙️</span> Instellingen</button>
-        <button onclick="showPage('over-mij', event)"><span>👤</span> Over mij</button>
+        <button onclick="showPage('over-mij', event)" class="active"><span>👤</span> Over mij</button>
         <button onclick="showPage('weer', event)"><span>🌤️</span> Weerbericht</button>
-        <button onclick="showPage('spelletjes', event)"><span>🎮</span> Spelletjes</button>
+        <button onclick="showPage('spelletjes', event)"><span>🎮</span> 2-Player Game</button>
     </nav>
 
-    <!-- Hoofd-ovaal -->
-    <main>
-        <div class="main-oval">
+    <!-- OVERZICHTELIJK INSTELLINGEN PANEEL -->
+    <div class="settings-modal-overlay" id="settingsOverlay" onclick="closeSettingsOuter(event)">
+        <div class="settings-panel">
+            <div class="settings-header">
+                <h2>⚙️ Instellingen</h2>
+                <button class="close-btn" onclick="toggleSettingsModal()">✕</button>
+            </div>
+
+            <!-- Categorie 1: Visueel -->
+            <div class="settings-section-title">🎨 Visueel Thema</div>
             
-            <!-- INSTELLINGEN -->
-            <div id="instellingen" class="page active">
-                <h1>⚙️ Instellingen</h1>
-                <p>Pas de website aan naar jouw eigen wensen!</p>
+            <div class="setting-row">
+                <label>Thema Modus</label>
+                <select id="theme-select" onchange="changeTheme(this.value)">
+                    <option value="light">Licht Thema</option>
+                    <option value="dark">Donker Thema</option>
+                    <option value="auto">Automatisch (Zonsondergang)</option>
+                </select>
+            </div>
 
-                <div class="glass-card">
-                    <div class="setting-group">
-                        <label>🎨 Thema Mode:</label>
-                        <select id="theme-select" onchange="updateTheme()">
-                            <option value="light">Licht Thema</option>
-                            <option value="dark">Donker Thema</option>
-                            <option value="auto">Automatisch (Donker bij zonsondergang)</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-group">
-                        <label>🎨 Accentkleur:</label>
-                        <div class="color-options">
-                            <div class="color-btn" style="background: #0284c7;" onclick="setAccent('#0284c7', '#0369a1')"></div>
-                            <div class="color-btn" style="background: #10b981;" onclick="setAccent('#10b981', '#047857')"></div>
-                            <div class="color-btn" style="background: #f97316;" onclick="setAccent('#f97316', '#c2410c')"></div>
-                        </div>
-                    </div>
-
-                    <div class="setting-group">
-                        <label>🖼️ Achtergrond:</label>
-                        <select id="bg-select" onchange="updateBackground()">
-                            <option value="default">Minimalistisch Schoon</option>
-                            <option value="pattern">Subtiel Patroon</option>
-                            <option value="animated">Bewegende Kleuren</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-group">
-                        <label>📍 Locatie voor Weerbericht:</label>
-                        <input type="text" id="city-input" value="Leiden" onchange="saveCity()">
-                    </div>
-
-                    <div class="setting-group">
-                        <label>👤 Jouw Naam (voor begroeting):</label>
-                        <input type="text" id="name-input" placeholder="Vul je naam in..." oninput="updateName()">
-                    </div>
-
-                    <div class="setting-group">
-                        <label>🔊 Geluidseffecten:</label>
-                        <select id="sound-select">
-                            <option value="on">Aan 🔔</option>
-                            <option value="off">Uit 🔕</option>
-                        </select>
-                    </div>
-
-                    <div class="setting-group">
-                        <label>🎯 Moeilijkheidsgraad Spel:</label>
-                        <select id="diff-select">
-                            <option value="easy">Easy (Rustig)</option>
-                            <option value="medium" selected>Medium (Normaal)</option>
-                            <option value="hard">Hard (Snel & Uitdagend)</option>
-                        </select>
-                    </div>
+            <div class="setting-row">
+                <label>Accentkleur</label>
+                <div class="color-options">
+                    <div class="color-dot" style="background:#0284c7;" onclick="setAccent('#0284c7', '#0369a1')"></div>
+                    <div class="color-dot" style="background:#10b981;" onclick="setAccent('#10b981', '#059669')"></div>
+                    <div class="color-dot" style="background:#f97316;" onclick="setAccent('#f97316', '#ea580c')"></div>
+                    <div class="color-dot" style="background:#8b5cf6;" onclick="setAccent('#8b5cf6', '#7c3aed')"></div>
                 </div>
             </div>
 
-            <!-- OVER MIJ -->
-            <div id="over-mij" class="page">
-                <h1 id="welcome-header">👋 Welkom op mijn website!</h1>
-                <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website kun je daarom ook een spelletje spelen! Naast het spel kun je het live weer bekijken.</p>
-                <p>Gebruik het menu om de instellingen aan te passen, het weer te bekijken of een game te starten!</p>
+            <div class="setting-row">
+                <label>Achtergrondstijl</label>
+                <select onchange="changeBg(this.value)">
+                    <option value="clean">Minimalistisch</option>
+                    <option value="pattern">Subtiel Patroon</option>
+                    <option value="animated">Geanimeerd Verloop</option>
+                </select>
             </div>
 
-            <!-- WEER -->
+            <!-- Categorie 2: Personalisatie -->
+            <div class="settings-section-title">🌐 Personalisatie</div>
+
+            <div class="setting-row">
+                <label>Jouw Naam</label>
+                <input type="text" id="username-input" placeholder="Vul je naam in..." oninput="updateUsername(this.value)">
+            </div>
+
+            <div class="setting-row">
+                <label>Stad Weerbericht</label>
+                <div style="display:flex; gap:6px;">
+                    <input type="text" id="city-input" value="Leiden" placeholder="Bijv. Amsterdam">
+                    <button class="btn-action" style="margin-top:0; padding: 8px 12px;" onclick="saveCity()">Opslaan</button>
+                </div>
+            </div>
+
+            <!-- Categorie 3: Game & Geluid -->
+            <div class="settings-section-title">🎮 Game Opties</div>
+
+            <div class="setting-row">
+                <label>Moeilijkheidsgraad</label>
+                <select id="difficulty-select">
+                    <option value="easy">Easy (Rustig)</option>
+                    <option value="medium" selected>Medium (Normaal)</option>
+                    <option value="hard">Hard (Snel)</option>
+                </select>
+            </div>
+
+            <div class="setting-row">
+                <label>Geluidseffecten</label>
+                <select id="sound-toggle">
+                    <option value="on">Aan 🔊</option>
+                    <option value="off">Uit 🔇</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hoofdinhoud -->
+    <main>
+        <div class="main-oval">
+            
+            <!-- OVER MIJ -->
+            <div id="over-mij" class="page active">
+                <h1 id="welcome-title">👋 Welkom!</h1>
+                <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website kun je samen een spelletje spelen en het weer bekijken!</p>
+                <p>Gebruik de knop <strong>Instellingen rechtsboven</strong> om de website helemaal naar wens aan te passen.</p>
+            </div>
+
+            <!-- ACTUEEL WEER -->
             <div id="weer" class="page">
-                <h1>🌤️ Weerbericht: <span id="location-name">Leiden</span></h1>
-                <p>Live en verwachte weergegevens voor jouw gekozen stad:</p>
+                <h1 id="weather-city-title">🌤️ Weerbericht</h1>
                 
                 <div class="glass-card">
                     <div id="weather-status">Weergegevens laden...</div>
                     <div id="weather-details" style="display: none;">
-                        
-                        <div class="weather-section-title">Nu (Actueel)</div>
+                        <p><strong>Nu Actueel:</strong></p>
                         <div class="weather-grid">
                             <div class="weather-item">🌡️ <span id="temp-now">-</span> °C</div>
                             <div class="weather-item">🌧️ <span id="rain-now">-</span> mm</div>
                             <div class="weather-item">💨 <span id="wind-now">-</span> km/h</div>
                         </div>
 
-                        <div class="weather-section-title">Morgen (Verwachting)</div>
+                        <p style="margin-top: 15px;"><strong>Morgen:</strong></p>
                         <div class="weather-grid">
                             <div class="weather-item">📈 Max <span id="temp-max-tom">-</span> °C</div>
                             <div class="weather-item">📉 Min <span id="temp-min-tom">-</span> °C</div>
                             <div class="weather-item">🌧️ <span id="rain-tom">-</span> mm</div>
-                            <div class="weather-item">💨 Max <span id="wind-tom">-</span> km/h</div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
-            <!-- SPEL -->
+            <!-- 2-PLAYER GAME -->
             <div id="spelletjes" class="page">
-                <h1>🎮 Weather Catcher</h1>
-                <p>Vang de regendruppels (💧 +10) en zonnetjes (☀️ +25). Ontwijk de bliksemwolken (🌩️ -15)!</p>
+                <h1>🎮 2-Player Weather Co-Op</h1>
+                <p>Speler 1 (A/D toetsen) & Speler 2 (Pijltjes L/R). Vang samen de vallende items op!</p>
                 
                 <div class="glass-card">
-                    <div class="game-stats">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold;">
                         <span>Score: <span id="score">0</span></span>
                         <span>Tijd: <span id="timer">30</span>s</span>
                     </div>
-                    
-                    <div id="game-container" onmousemove="moveBasket(event)">
-                        <div id="basket"></div>
+
+                    <div id="game-container">
+                        <div id="paddle1" class="paddle"></div>
+                        <div id="paddle2" class="paddle"></div>
                     </div>
 
-                    <button class="btn-action" onclick="startGame()">Start Spel</button>
+                    <button class="btn-action" onclick="startMultiplayerGame()">Start Multiplayer Spel</button>
+
+                    <div style="margin-top: 15px;">
+                        <h3>🏆 Highscores / Leaderboard</h3>
+                        <ul id="leaderboard" class="leaderboard-list">
+                            <li><span>Geen scores opgeslagen</span></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
@@ -432,9 +528,24 @@
 
     <script>
         let currentCity = "Leiden";
-        let userAudioCtx = null;
+        let keyState = {};
 
-        // Pagina wisselen
+        window.addEventListener('keydown', e => keyState[e.code] = true);
+        window.addEventListener('keyup', e => keyState[e.code] = false);
+
+        // Modal openen/sluiten
+        function toggleSettingsModal() {
+            const overlay = document.getElementById('settingsOverlay');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSettingsOuter(e) {
+            if (e.target.id === 'settingsOverlay') {
+                toggleSettingsModal();
+            }
+        }
+
+        // Pagina Wisselen
         function showPage(pageId, event) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -442,142 +553,95 @@
             document.getElementById(pageId).classList.add('active');
             if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
-            if(pageId === 'weer') fetchWeather(currentCity);
+            if(pageId === 'weer') fetchCityWeather(currentCity);
             if(pageId !== 'spelletjes') stopGame();
         }
 
         // Instellingen Logica
-        function updateTheme() {
-            const mode = document.getElementById('theme-select').value;
-            const body = document.body;
-            
-            if (mode === 'dark') {
-                body.classList.add('dark-theme');
-            } else if (mode === 'light') {
-                body.classList.remove('dark-theme');
-            } else if (mode === 'auto') {
+        function changeTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else if (theme === 'light') {
+                document.body.classList.remove('dark-mode');
+            } else if (theme === 'auto') {
                 const hour = new Date().getHours();
                 if (hour >= 19 || hour < 7) {
-                    body.classList.add('dark-theme');
+                    document.body.classList.add('dark-mode');
                 } else {
-                    body.classList.remove('dark-theme');
+                    document.body.classList.remove('dark-mode');
                 }
             }
         }
 
-        function setAccent(color, hover) {
-            document.documentElement.style.setProperty('--accent-color', color);
-            document.documentElement.style.setProperty('--accent-hover', hover);
+        function setAccent(primary, hover) {
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--primary-hover', hover);
         }
 
-        function updateBackground() {
-            const bg = document.getElementById('bg-select').value;
+        function changeBg(type) {
             document.body.classList.remove('bg-pattern', 'bg-animated');
-            if (bg === 'pattern') document.body.classList.add('bg-pattern');
-            if (bg === 'animated') document.body.classList.add('bg-animated');
+            if (type === 'pattern') document.body.classList.add('bg-pattern');
+            if (type === 'animated') document.body.classList.add('bg-animated');
         }
 
-        function updateName() {
-            const name = document.getElementById('name-input').value.trim();
-            const header = document.getElementById('welcome-header');
-            if (name.length > 0) {
-                header.innerText = `👋 Welkom, ${name}!`;
+        function updateUsername(name) {
+            const title = document.getElementById('welcome-title');
+            if (name.trim() !== "") {
+                title.innerText = `👋 Welkom, ${name}!`;
             } else {
-                header.innerText = `👋 Welkom op mijn website!`;
+                title.innerText = "👋 Welkom!";
             }
         }
 
         function saveCity() {
-            const city = document.getElementById('city-input').value.trim();
-            if (city.length > 0) {
+            const city = document.getElementById('city-input').value;
+            if(city.trim() !== "") {
                 currentCity = city;
-                document.getElementById('location-name').innerText = city;
+                alert(`Stad gewijzigd naar: ${city}`);
             }
         }
 
-        // Weer API met dynamische stadzoekfunctie (Geocoding)
-        async function fetchWeather(cityName) {
+        // Weer via Geocoding + Open-Meteo
+        async function fetchCityWeather(cityName) {
+            document.getElementById('weather-city-title').innerText = `🌤️ Weer in ${cityName}`;
             const statusText = document.getElementById('weather-status');
             const detailsDiv = document.getElementById('weather-details');
-            statusText.style.display = "block";
-            statusText.innerText = "Weergegevens laden...";
-            detailsDiv.style.display = "none";
 
             try {
-                // Zoek coördinaten voor de gekozen stad
                 const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=nl`);
                 const geoData = await geoRes.json();
 
                 if (!geoData.results || geoData.results.length === 0) {
-                    statusText.innerText = `Stad "${cityName}" niet gevonden. Probeer een andere stad.`;
+                    statusText.innerText = "Stad niet gevonden. Controleer de spelling.";
                     return;
                 }
 
-                const lat = geoData.results[0].latitude;
-                const lon = geoData.results[0].longitude;
-                document.getElementById('location-name').innerText = geoData.results[0].name;
+                const { latitude, longitude } = geoData.results[0];
 
-                // Haal weerdata op
-                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum,wind_speed_10m_max&timezone=Europe%2FAmsterdam`;
-                const response = await fetch(url);
-                const data = await response.json();
+                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Europe%2FAmsterdam`);
+                const weatherData = await weatherRes.json();
 
-                // Actueel
-                document.getElementById('temp-now').innerText = data.current.temperature_2m;
-                document.getElementById('rain-now').innerText = data.current.rain;
-                document.getElementById('wind-now').innerText = data.current.wind_speed_10m;
+                document.getElementById('temp-now').innerText = weatherData.current.temperature_2m;
+                document.getElementById('rain-now').innerText = weatherData.current.rain;
+                document.getElementById('wind-now').innerText = weatherData.current.wind_speed_10m;
 
-                // Morgen
-                document.getElementById('temp-max-tom').innerText = data.daily.temperature_2m_max[1];
-                document.getElementById('temp-min-tom').innerText = data.daily.temperature_2m_min[1];
-                document.getElementById('rain-tom').innerText = data.daily.rain_sum[1];
-                document.getElementById('wind-tom').innerText = data.daily.wind_speed_10m_max[1];
+                document.getElementById('temp-max-tom').innerText = weatherData.daily.temperature_2m_max[1];
+                document.getElementById('temp-min-tom').innerText = weatherData.daily.temperature_2m_min[1];
+                document.getElementById('rain-tom').innerText = weatherData.daily.rain_sum[1];
 
                 statusText.style.display = "none";
                 detailsDiv.style.display = "block";
-            } catch (error) {
-                statusText.innerText = "Laden van weergegevens mislukt. Controleer je verbinding.";
+            } catch (err) {
+                statusText.innerText = "Kon weerbericht niet ophalen.";
             }
         }
 
-        // Geluidseffecten genereren via Web Audio API (Geen externe bestanden nodig)
-        function playBeep(freq = 440, type = 'sine') {
-            if (document.getElementById('sound-select').value === 'off') return;
-            try {
-                if (!userAudioCtx) userAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = userAudioCtx.createOscillator();
-                const gain = userAudioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(0.1, userAudioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, userAudioCtx.currentTime + 0.15);
-                osc.connect(gain);
-                gain.connect(userAudioCtx.destination);
-                osc.start();
-                osc.stop(userAudioCtx.currentTime + 0.15);
-            } catch (e) {}
-        }
+        // 2-Player Game Engine
+        let score = 0, timeLeft = 30, gameActive = false;
+        let p1X = 50, p2X = 200;
+        let gameLoop, timerLoop, spawnLoop, activeObjects = [];
 
-        // Vang-Spel Arcade Logica
-        let score = 0;
-        let timeLeft = 30;
-        let gameLoopInterval = null;
-        let timerInterval = null;
-        let spawnInterval = null;
-        let gameActive = false;
-        let basketX = 0;
-        let activeObjects = [];
-
-        function moveBasket(e) {
-            const container = document.getElementById('game-container');
-            const rect = container.getBoundingClientRect();
-            basketX = e.clientX - rect.left - 30;
-            if (basketX < 0) basketX = 0;
-            if (basketX > rect.width - 60) basketX = rect.width - 60;
-            document.getElementById('basket').style.left = basketX + 'px';
-        }
-
-        function startGame() {
+        function startMultiplayerGame() {
             stopGame();
             score = 0;
             timeLeft = 30;
@@ -588,90 +652,109 @@
             document.querySelectorAll('.game-object').forEach(el => el.remove());
             activeObjects = [];
 
-            // Snelheid en Spawn-tijd instellen op basis van Moeilijkheidsgraad
-            const diff = document.getElementById('diff-select').value;
-            let spawnRate = 600;
-            if (diff === 'easy') spawnRate = 800;
-            if (diff === 'hard') spawnRate = 400;
+            const diff = document.getElementById('difficulty-select').value;
+            let spawnSpeed = diff === 'easy' ? 800 : (diff === 'medium' ? 500 : 300);
 
-            timerInterval = setInterval(() => {
+            timerLoop = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timer').innerText = timeLeft;
                 if (timeLeft <= 0) stopGame(true);
             }, 1000);
 
-            spawnInterval = setInterval(() => spawnObject(diff), spawnRate);
-            gameLoopInterval = setInterval(updateGameObjects, 20);
+            spawnLoop = setInterval(spawnItem, spawnSpeed);
+            gameLoop = setInterval(updateMultiplayer, 20);
         }
 
         function stopGame(finished = false) {
             gameActive = false;
-            clearInterval(gameLoopInterval);
-            clearInterval(timerInterval);
-            clearInterval(spawnInterval);
+            clearInterval(gameLoop);
+            clearInterval(timerLoop);
+            clearInterval(spawnLoop);
+
             if (finished) {
-                playBeep(600, 'triangle');
-                alert(`Tijd is om! Je eindscore is: ${score}`);
+                playSound();
+                const name = prompt(`Tijd is om! Score: ${score}. Vul je naam in voor het Leaderboard:`);
+                if (name) saveScore(name, score);
             }
         }
 
-        function spawnObject(diff) {
+        function spawnItem() {
             if (!gameActive) return;
             const container = document.getElementById('game-container');
-            
-            let speedMultiplier = 1;
-            if (diff === 'easy') speedMultiplier = 0.7;
-            if (diff === 'hard') speedMultiplier = 1.4;
-
-            const types = [
-                { symbol: '💧', points: 10, speed: 2.5 * speedMultiplier },
-                { symbol: '💧', points: 10, speed: 3 * speedMultiplier },
-                { symbol: '☀️', points: 25, speed: 3.5 * speedMultiplier },
-                { symbol: '🌩️', points: -15, speed: 2 * speedMultiplier }
-            ];
-            
-            const chosen = types[Math.floor(Math.random() * types.length)];
             const el = document.createElement('div');
             el.className = 'game-object';
-            el.innerText = chosen.symbol;
-            
-            const x = Math.random() * (container.clientWidth - 30);
+            el.innerText = Math.random() > 0.3 ? '💧' : '☀️';
+            const x = Math.random() * (container.clientWidth - 20);
             el.style.left = x + 'px';
             el.style.top = '0px';
-            
             container.appendChild(el);
-            activeObjects.push({ element: el, x: x, y: 0, points: chosen.points, speed: chosen.speed });
+            activeObjects.push({ el, x, y: 0, points: el.innerText === '☀️' ? 20 : 10 });
         }
 
-        function updateGameObjects() {
-            const containerHeight = 200;
-            const basketY = containerHeight - 25;
+        function updateMultiplayer() {
+            const speed = 6;
+            const width = document.getElementById('game-container').clientWidth;
+
+            if (keyState['KeyA'] && p1X > 0) p1X -= speed;
+            if (keyState['KeyD'] && p1X < width - 50) p1X += speed;
+
+            if (keyState['ArrowLeft'] && p2X > 0) p2X -= speed;
+            if (keyState['ArrowRight'] && p2X < width - 50) p2X += speed;
+
+            document.getElementById('paddle1').style.left = p1X + 'px';
+            document.getElementById('paddle2').style.left = p2X + 'px';
 
             for (let i = activeObjects.length - 1; i >= 0; i--) {
-                const obj = activeObjects[i];
-                obj.y += obj.speed;
-                obj.element.style.top = obj.y + 'px';
+                let obj = activeObjects[i];
+                obj.y += 3;
+                obj.el.style.top = obj.y + 'px';
 
-                if (obj.y >= basketY && obj.y <= basketY + 15) {
-                    if (obj.x >= basketX - 15 && obj.x <= basketX + 55) {
+                if (obj.y >= 190 && obj.y <= 205) {
+                    if ((obj.x >= p1X - 15 && obj.x <= p1X + 45) || (obj.x >= p2X - 15 && obj.x <= p2X + 45)) {
                         score += obj.points;
                         document.getElementById('score').innerText = score;
-                        
-                        if (obj.points > 0) playBeep(520, 'sine');
-                        else playBeep(200, 'sawtooth');
-
-                        obj.element.remove();
+                        playSound();
+                        obj.el.remove();
                         activeObjects.splice(i, 1);
                         continue;
                     }
                 }
 
-                if (obj.y > containerHeight) {
-                    obj.element.remove();
+                if (obj.y > 220) {
+                    obj.el.remove();
                     activeObjects.splice(i, 1);
                 }
             }
         }
+
+        function playSound() {
+            if (document.getElementById('sound-toggle').value === 'on') {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                osc.connect(ctx.destination);
+                osc.frequency.value = 440;
+                osc.start();
+                osc.stop(ctx.currentTime + 0.08);
+            }
+        }
+
+        function saveScore(name, score) {
+            let scores = JSON.parse(localStorage.getItem('scores') || '[]');
+            scores.push({ name, score });
+            scores.sort((a, b) => b.score - a.score);
+            scores = scores.slice(0, 5);
+            localStorage.setItem('scores', JSON.stringify(scores));
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            let scores = JSON.parse(localStorage.getItem('scores') || '[]');
+            const list = document.getElementById('leaderboard');
+            if (scores.length === 0) return;
+            list.innerHTML = scores.map(s => `<li><span>${s.name}</span><strong>${s.score} pt</strong></li>`).join('');
+        }
+
+        renderLeaderboard();
     </script>
 </body>
 </html>
