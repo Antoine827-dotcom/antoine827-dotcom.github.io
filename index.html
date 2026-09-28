@@ -10,37 +10,37 @@
             --primary-hover: #0369a1;
             --accent-bg: rgba(56, 189, 248, 0.15);
             --bg-gradient: radial-gradient(circle at 20% 20%, #f8fafc 0%, #e2e8f0 100%);
-            --glass-bg: rgba(255, 255, 255, 0.45);
-            --glass-card: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-card: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.8);
             --text-color: #0f172a;
-            --subtext-color: #475569;
-            --nav-bg: rgba(255, 255, 255, 0.4);
+            --subtext-color: #334155;
+            --nav-bg: rgba(255, 255, 255, 0.45);
         }
 
         body.dark-mode {
             --bg-gradient: radial-gradient(circle at 20% 20%, #0f172a 0%, #020617 100%);
-            --glass-bg: rgba(15, 23, 42, 0.55);
-            --glass-card: rgba(30, 41, 59, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-bg: rgba(15, 23, 42, 0.70);
+            --glass-card: rgba(30, 41, 59, 0.80);
+            --glass-border: rgba(255, 255, 255, 0.2);
             --text-color: #f8fafc;
-            --subtext-color: #94a3b8;
-            --nav-bg: rgba(15, 23, 42, 0.5);
+            --subtext-color: #cbd5e1;
+            --nav-bg: rgba(15, 23, 42, 0.65);
         }
 
         body.bg-pattern {
-            background-image: radial-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px) !important;
+            background-size: 20px 20px !important;
         }
 
         body.dark-mode.bg-pattern {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px) !important;
         }
 
         body.bg-animated {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) !important;
+            background-size: 400% 400% !important;
+            animation: gradientBG 15s ease infinite !important;
         }
 
         @keyframes gradientBG {
@@ -62,8 +62,11 @@
             color: var(--text-color);
             display: flex;
             min-height: 100vh;
-            transition: background 0.3s ease, color 0.3s ease;
+            transition: background 0.5s ease, color 0.3s ease;
             position: relative;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         /* Navigatiebalk links */
@@ -81,7 +84,7 @@
         }
 
         nav button {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             color: var(--text-color);
             border: 1px solid var(--glass-border);
             backdrop-filter: blur(10px);
@@ -98,7 +101,7 @@
         }
 
         nav button:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.4);
             transform: translateY(-1px);
         }
 
@@ -106,18 +109,18 @@
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
-            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
+            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.3);
         }
 
         /* Instellingen-knop Rechtsboven */
         .settings-top-btn {
-            position: absolute;
+            position: fixed;
             top: 20px;
             right: 25px;
             background: var(--glass-card);
             color: var(--text-color);
             border: 1px solid var(--glass-border);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             padding: 10px 18px;
             border-radius: 20px;
             font-weight: 600;
@@ -125,22 +128,22 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
             z-index: 90;
         }
 
         .settings-top-btn:hover {
             transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
         }
 
-        /* Overzichtelijk Instellingen Paneel (Flyout Modal) */
+        /* Instellingen Modal / Flyout */
         .settings-modal-overlay {
             position: fixed;
             top: 0; right: 0; bottom: 0; left: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(6px);
             display: none;
             justify-content: flex-end;
             z-index: 100;
@@ -160,7 +163,7 @@
             border-left: 1px solid var(--glass-border);
             padding: 30px;
             overflow-y: auto;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -209,7 +212,7 @@
             padding: 10px 12px;
             border-radius: 10px;
             border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.3);
             color: var(--text-color);
             font-size: 0.9rem;
             outline: none;
@@ -251,14 +254,14 @@
             backdrop-filter: blur(30px) saturate(190%);
             -webkit-backdrop-filter: blur(30px) saturate(190%);
             border: 1px solid var(--glass-border);
-            border-radius: 50% / 32%;
-            padding: 50px 70px;
+            border-radius: 40px;
+            padding: 50px 60px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
         }
 
         .page {
@@ -290,7 +293,7 @@
             padding: 20px;
             border-radius: 20px;
             margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             text-align: left;
         }
 
@@ -304,7 +307,7 @@
 
         .weather-item {
             flex: 1;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             padding: 12px 10px;
             border-radius: 14px;
             border: 1px solid var(--glass-border);
@@ -317,7 +320,7 @@
             position: relative;
             width: 100%;
             height: 220px;
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 16px;
             border: 1px solid var(--glass-border);
             overflow: hidden;
@@ -362,7 +365,7 @@
 
         .leaderboard-list li {
             padding: 6px 10px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             margin-bottom: 4px;
             border-radius: 8px;
             display: flex;
@@ -416,7 +419,8 @@
 
             <div class="setting-row">
                 <label>Achtergrondstijl</label>
-                <select onchange="changeBg(this.value)">
+                <select id="bg-style-select" onchange="changeBg(this.value)">
+                    <option value="city">Stadssfeer (Dynamisch)</option>
                     <option value="clean">Minimalistisch</option>
                     <option value="pattern">Subtiel Patroon</option>
                     <option value="animated">Geanimeerd Verloop</option>
@@ -434,7 +438,7 @@
             <div class="setting-row">
                 <label>Stad Weerbericht</label>
                 <div style="display:flex; gap:6px;">
-                    <input type="text" id="city-input" value="Leiden" placeholder="Bijv. Amsterdam">
+                    <input type="text" id="city-input" value="Leiden" placeholder="Bijv. Londen, Amsterdam, Parijs">
                     <button class="btn-action" style="margin-top:0; padding: 8px 12px;" onclick="saveCity()">Opslaan</button>
                 </div>
             </div>
@@ -469,7 +473,7 @@
             <div id="over-mij" class="page active">
                 <h1 id="welcome-title">👋 Welkom!</h1>
                 <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website kun je samen een spelletje spelen en het weer bekijken!</p>
-                <p>Gebruik de knop <strong>Instellingen rechtsboven</strong> om de website helemaal naar wens aan te passen.</p>
+                <p>Gebruik de knop <strong>Instellingen rechtsboven</strong> om de stadsachtergrond, thema's en voorkeuren aan te passen.</p>
             </div>
 
             <!-- ACTUEEL WEER -->
@@ -528,21 +532,50 @@
 
     <script>
         let currentCity = "Leiden";
+        let currentBgStyle = "city";
         let keyState = {};
+
+        // Bekende steden en hun kenmerkende landmark achtergronden
+        const cityLandmarks = {
+            'leiden': 'https://images.unsplash.com/photo-1584003564911-a7a321c84e1c?auto=format&fit=crop&w=1920&q=80',
+            'amsterdam': 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=1920&q=80',
+            'rotterdam': 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?auto=format&fit=crop&w=1920&q=80',
+            'utrecht': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1920&q=80',
+            'londen': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1920&q=80',
+            'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1920&q=80',
+            'parijs': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80',
+            'paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80',
+            'rome': 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80',
+            'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1920&q=80',
+            'tokio': 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80',
+            'tokyo': 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80'
+        };
 
         window.addEventListener('keydown', e => keyState[e.code] = true);
         window.addEventListener('keyup', e => keyState[e.code] = false);
 
+        // Dynamische achtergrond op basis van gekozen stad
+        function updateCityBackground(cityName) {
+            if (currentBgStyle !== 'city') return;
+
+            const cleanCity = cityName.toLowerCase().trim();
+            let imgUrl = cityLandmarks[cleanCity];
+
+            // Fallback sfeerfoto van een mooie stad
+            if (!imgUrl) {
+                imgUrl = `https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1920&q=80`;
+            }
+
+            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${imgUrl}')`;
+        }
+
         // Modal openen/sluiten
         function toggleSettingsModal() {
-            const overlay = document.getElementById('settingsOverlay');
-            overlay.classList.toggle('active');
+            document.getElementById('settingsOverlay').classList.toggle('active');
         }
 
         function closeSettingsOuter(e) {
-            if (e.target.id === 'settingsOverlay') {
-                toggleSettingsModal();
-            }
+            if (e.target.id === 'settingsOverlay') toggleSettingsModal();
         }
 
         // Pagina Wisselen
@@ -579,24 +612,30 @@
         }
 
         function changeBg(type) {
+            currentBgStyle = type;
             document.body.classList.remove('bg-pattern', 'bg-animated');
-            if (type === 'pattern') document.body.classList.add('bg-pattern');
-            if (type === 'animated') document.body.classList.add('bg-animated');
+            document.body.style.backgroundImage = '';
+
+            if (type === 'city') {
+                updateCityBackground(currentCity);
+            } else if (type === 'pattern') {
+                document.body.classList.add('bg-pattern');
+            } else if (type === 'animated') {
+                document.body.classList.add('bg-animated');
+            }
         }
 
         function updateUsername(name) {
             const title = document.getElementById('welcome-title');
-            if (name.trim() !== "") {
-                title.innerText = `👋 Welkom, ${name}!`;
-            } else {
-                title.innerText = "👋 Welkom!";
-            }
+            title.innerText = name.trim() !== "" ? `👋 Welkom, ${name}!` : "👋 Welkom!";
         }
 
         function saveCity() {
             const city = document.getElementById('city-input').value;
             if(city.trim() !== "") {
                 currentCity = city;
+                updateCityBackground(currentCity);
+                fetchCityWeather(currentCity);
                 alert(`Stad gewijzigd naar: ${city}`);
             }
         }
@@ -754,6 +793,8 @@
             list.innerHTML = scores.map(s => `<li><span>${s.name}</span><strong>${s.score} pt</strong></li>`).join('');
         }
 
+        // Initïele instellingen toepassen bij laden
+        updateCityBackground(currentCity);
         renderLeaderboard();
     </script>
 </body>
