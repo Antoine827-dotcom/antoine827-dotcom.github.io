@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mijn Website</title>
+    <!-- Chart.js voor de weekgrafiek -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary-color: #0284c7;
@@ -315,6 +317,29 @@
             text-align: center;
         }
 
+        .weather-nav-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .weather-nav-btns button {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid var(--glass-border);
+            color: var(--text-color);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .weather-nav-btns button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
         /* Game UI */
         #game-container {
             position: relative;
@@ -418,9 +443,8 @@
             </div>
 
             <div class="setting-row">
-                <label>Achtergrondstijl</label>
+                <label>Achtergrondstijl (Overige Pagina's)</label>
                 <select id="bg-style-select" onchange="changeBg(this.value)">
-                    <option value="city">Stadssfeer (Dynamisch)</option>
                     <option value="clean">Minimalistisch</option>
                     <option value="pattern">Subtiel Patroon</option>
                     <option value="animated">Geanimeerd Verloop</option>
@@ -483,19 +507,38 @@
                 <div class="glass-card">
                     <div id="weather-status">Weergegevens laden...</div>
                     <div id="weather-details" style="display: none;">
-                        <p><strong>Nu Actueel:</strong></p>
-                        <div class="weather-grid">
-                            <div class="weather-item">🌡️ <span id="temp-now">-</span> °C</div>
-                            <div class="weather-item">🌧️ <span id="rain-now">-</span> mm</div>
-                            <div class="weather-item">💨 <span id="wind-now">-</span> km/h</div>
+                        
+                        <!-- Schakelknoppen binnen het weertabblad -->
+                        <div class="weather-nav-btns">
+                            <button id="btn-view-today" class="active" onclick="switchWeatherTab('today')">Vandaag & Morgen</button>
+                            <button id="btn-view-weekly" onclick="switchWeatherTab('weekly')">📈 Weekverwachting (Grafiek)</button>
                         </div>
 
-                        <p style="margin-top: 15px;"><strong>Morgen:</strong></p>
-                        <div class="weather-grid">
-                            <div class="weather-item">📈 Max <span id="temp-max-tom">-</span> °C</div>
-                            <div class="weather-item">📉 Min <span id="temp-min-tom">-</span> °C</div>
-                            <div class="weather-item">🌧️ <span id="rain-tom">-</span> mm</div>
+                        <!-- Weergave 1: Vandaag & Morgen -->
+                        <div id="weather-view-today">
+                            <p><strong>Nu Actueel:</strong></p>
+                            <div class="weather-grid">
+                                <div class="weather-item">🌡️ <span id="temp-now">-</span> °C</div>
+                                <div class="weather-item">🌧️ <span id="rain-now">-</span> mm</div>
+                                <div class="weather-item">💨 <span id="wind-now">-</span> km/h</div>
+                            </div>
+
+                            <p style="margin-top: 15px;"><strong>Morgen:</strong></p>
+                            <div class="weather-grid">
+                                <div class="weather-item">📈 Max <span id="temp-max-tom">-</span> °C</div>
+                                <div class="weather-item">📉 Min <span id="temp-min-tom">-</span> °C</div>
+                                <div class="weather-item">🌧️ <span id="rain-tom">-</span> mm</div>
+                            </div>
                         </div>
+
+                        <!-- Weergave 2: Weekgrafiek -->
+                        <div id="weather-view-weekly" style="display: none;">
+                            <p style="text-align: center; font-weight: 600; margin-bottom: 10px;">Temperatuurverwachting 7 Dagen (°C)</p>
+                            <div style="position: relative; height: 220px; width: 100%;">
+                                <canvas id="weeklyChart"></canvas>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -532,8 +575,10 @@
 
     <script>
         let currentCity = "Leiden";
-        let currentBgStyle = "city";
+        let currentBgStyle = "clean";
         let keyState = {};
+        let weeklyChartInstance = null;
+        let cachedDailyData = null;
 
         // Bekende steden en hun kenmerkende landmark achtergronden
         const cityLandmarks = {
@@ -554,19 +599,21 @@
         window.addEventListener('keydown', e => keyState[e.code] = true);
         window.addEventListener('keyup', e => keyState[e.code] = false);
 
-        // Dynamische achtergrond op basis van gekozen stad
+        // Achtergrondinstellingen toepassen
         function updateCityBackground(cityName) {
-            if (currentBgStyle !== 'city') return;
-
             const cleanCity = cityName.toLowerCase().trim();
             let imgUrl = cityLandmarks[cleanCity];
 
-            // Fallback sfeerfoto van een mooie stad
             if (!imgUrl) {
                 imgUrl = `https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1920&q=80`;
             }
 
             document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${imgUrl}')`;
+        }
+
+        function clearCityBackground() {
+            document.body.style.backgroundImage = '';
+            changeBg(currentBgStyle);
         }
 
         // Modal openen/sluiten
@@ -578,7 +625,7 @@
             if (e.target.id === 'settingsOverlay') toggleSettingsModal();
         }
 
-        // Pagina Wisselen
+        // Pagina Wisselen (Met specifieke logica voor weertabblad achtergrond)
         function showPage(pageId, event) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -586,8 +633,38 @@
             document.getElementById(pageId).classList.add('active');
             if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
-            if(pageId === 'weer') fetchCityWeather(currentCity);
+            if(pageId === 'weer') {
+                updateCityBackground(currentCity);
+                fetchCityWeather(currentCity);
+            } else {
+                clearCityBackground();
+            }
+
             if(pageId !== 'spelletjes') stopGame();
+        }
+
+        // Weertabblad interne wissel (Vandaag vs Grafiek)
+        function switchWeatherTab(view) {
+            const todayView = document.getElementById('weather-view-today');
+            const weeklyView = document.getElementById('weather-view-weekly');
+            const btnToday = document.getElementById('btn-view-today');
+            const btnWeekly = document.getElementById('btn-view-weekly');
+
+            if (view === 'today') {
+                todayView.style.display = 'block';
+                weeklyView.style.display = 'none';
+                btnToday.classList.add('active');
+                btnWeekly.classList.remove('active');
+            } else {
+                todayView.style.display = 'none';
+                weeklyView.style.display = 'block';
+                btnToday.classList.remove('active');
+                btnWeekly.classList.add('active');
+
+                if (cachedDailyData) {
+                    renderWeeklyChart(cachedDailyData);
+                }
+            }
         }
 
         // Instellingen Logica
@@ -604,6 +681,9 @@
                     document.body.classList.remove('dark-mode');
                 }
             }
+            if (cachedDailyData && document.getElementById('weather-view-weekly').style.display !== 'none') {
+                renderWeeklyChart(cachedDailyData);
+            }
         }
 
         function setAccent(primary, hover) {
@@ -614,14 +694,12 @@
         function changeBg(type) {
             currentBgStyle = type;
             document.body.classList.remove('bg-pattern', 'bg-animated');
-            document.body.style.backgroundImage = '';
 
-            if (type === 'city') {
-                updateCityBackground(currentCity);
-            } else if (type === 'pattern') {
-                document.body.classList.add('bg-pattern');
-            } else if (type === 'animated') {
-                document.body.classList.add('bg-animated');
+            // Alleen toepassen als we NIET op het weertabblad zijn
+            const isWeatherPage = document.getElementById('weer').classList.contains('active');
+            if (!isWeatherPage) {
+                if (type === 'pattern') document.body.classList.add('bg-pattern');
+                if (type === 'animated') document.body.classList.add('bg-animated');
             }
         }
 
@@ -634,8 +712,10 @@
             const city = document.getElementById('city-input').value;
             if(city.trim() !== "") {
                 currentCity = city;
-                updateCityBackground(currentCity);
-                fetchCityWeather(currentCity);
+                if (document.getElementById('weer').classList.contains('active')) {
+                    updateCityBackground(currentCity);
+                    fetchCityWeather(currentCity);
+                }
                 alert(`Stad gewijzigd naar: ${city}`);
             }
         }
@@ -660,6 +740,7 @@
                 const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Europe%2FAmsterdam`);
                 const weatherData = await weatherRes.json();
 
+                // Nu & Morgen vullen
                 document.getElementById('temp-now').innerText = weatherData.current.temperature_2m;
                 document.getElementById('rain-now').innerText = weatherData.current.rain;
                 document.getElementById('wind-now').innerText = weatherData.current.wind_speed_10m;
@@ -668,11 +749,78 @@
                 document.getElementById('temp-min-tom').innerText = weatherData.daily.temperature_2m_min[1];
                 document.getElementById('rain-tom').innerText = weatherData.daily.rain_sum[1];
 
+                // Data opslaan voor weekgrafiek
+                cachedDailyData = weatherData.daily;
+
                 statusText.style.display = "none";
                 detailsDiv.style.display = "block";
+
+                // Als grafiekweergave actief is, direct tekenen
+                if (document.getElementById('weather-view-weekly').style.display !== 'none') {
+                    renderWeeklyChart(cachedDailyData);
+                }
             } catch (err) {
                 statusText.innerText = "Kon weerbericht niet ophalen.";
             }
+        }
+
+        // Chart.js Grafiek Genereren
+        function renderWeeklyChart(dailyData) {
+            const ctx = document.getElementById('weeklyChart').getContext('2d');
+
+            const labels = dailyData.time.map(d => {
+                const date = new Date(d);
+                return date.toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric' });
+            });
+
+            const isDark = document.body.classList.contains('dark-mode');
+            const textColor = isDark ? '#f8fafc' : '#0f172a';
+
+            if (weeklyChartInstance) {
+                weeklyChartInstance.destroy();
+            }
+
+            weeklyChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Max Temp (°C)',
+                            data: dailyData.temperature_2m_max,
+                            borderColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Min Temp (°C)',
+                            data: dailyData.temperature_2m_min,
+                            borderColor: '#0284c7',
+                            backgroundColor: 'rgba(2, 132, 199, 0.2)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: textColor } }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: textColor },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
         }
 
         // 2-Player Game Engine
@@ -793,8 +941,6 @@
             list.innerHTML = scores.map(s => `<li><span>${s.name}</span><strong>${s.score} pt</strong></li>`).join('');
         }
 
-        // Initïele instellingen toepassen bij laden
-        updateCityBackground(currentCity);
         renderLeaderboard();
     </script>
 </body>
