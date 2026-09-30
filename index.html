@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Mijn Website</title>
     <!-- Chart.js voor de weekgrafiek -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -57,6 +57,7 @@
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
+            touch-action: manipulation;
         }
 
         body {
@@ -257,7 +258,7 @@
             -webkit-backdrop-filter: blur(30px) saturate(190%);
             border: 1px solid var(--glass-border);
             border-radius: 40px;
-            padding: 50px 60px;
+            padding: 40px 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -340,62 +341,79 @@
             color: white;
         }
 
-        /* Penalty & Vrije Trappen Game UI */
+        /* SWIPE PENALTY GAME UI */
         #penalty-arena {
             position: relative;
             width: 100%;
-            height: 260px;
-            background: linear-gradient(to bottom, #15803d 60%, #166534 100%);
-            border-radius: 16px;
+            height: 320px;
+            background: radial-gradient(circle at 50% 10%, #15803d 0%, #166534 100%);
+            border-radius: 20px;
             border: 2px solid var(--glass-border);
             overflow: hidden;
-            cursor: crosshair;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.4);
             margin-top: 10px;
+            user-select: none;
+            touch-action: none;
         }
 
+        /* Doelpaal & Net */
         #goal-net {
             position: absolute;
-            top: 20px;
-            left: 15%;
-            width: 70%;
-            height: 110px;
-            border: 4px solid white;
-            border-bottom: none;
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.15), rgba(255,255,255,0.15) 5px, transparent 5px, transparent 10px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        #goalkeeper {
-            position: absolute;
-            bottom: 0;
-            left: 45%;
-            font-size: 32px;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            transform: translateX(-50%);
-            user-select: none;
-        }
-
-        #defender-wall {
-            position: absolute;
-            top: 135px;
-            left: 35%;
-            width: 30%;
-            text-align: center;
-            font-size: 26px;
-            letter-spacing: -2px;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        #soccer-ball {
-            position: absolute;
-            bottom: 15px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 26px;
-            transition: all 0.4s ease-out;
-            user-select: none;
+            width: 70%;
+            height: 110px;
+            border: 5px solid #ffffff;
+            border-bottom: none;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.12) 6px, transparent 6px, transparent 12px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Doellijn */
+        #goal-line {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255,255,255,0.8);
+        }
+
+        /* Keeper */
+        #goalkeeper {
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 38px;
+            transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+
+        /* Bal & Schot-animatie */
+        #soccer-ball {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translate(-50%, 0) scale(1);
+            font-size: 34px;
+            cursor: grab;
+            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.4));
+            z-index: 5;
+        }
+
+        #soccer-ball:active {
+            cursor: grabbing;
+        }
+
+        /* Stippellijn tijdens swipen */
+        #aim-line {
+            position: absolute;
+            pointer-events: none;
+            border-left: 3px dashed rgba(255, 255, 255, 0.7);
+            transform-origin: bottom center;
+            display: none;
+            z-index: 4;
         }
 
         .btn-action {
@@ -414,19 +432,10 @@
             background: var(--primary-hover);
         }
 
-        .leaderboard-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 10px;
-        }
-
-        .leaderboard-list li {
-            padding: 6px 10px;
-            background: rgba(255, 255, 255, 0.2);
-            margin-bottom: 4px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
+        .score-badge {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
         }
     </style>
 </head>
@@ -441,7 +450,7 @@
     <nav>
         <button onclick="showPage('over-mij', event)" class="active"><span>👤</span> Over mij</button>
         <button onclick="showPage('weer', event)"><span>🌤️</span> Weerbericht</button>
-        <button onclick="showPage('spelletjes', event)"><span>⚽</span> Penalty & Vrije Trappen</button>
+        <button onclick="showPage('spelletjes', event)"><span>⚽</span> Penalty Game</button>
     </nav>
 
     <!-- INSTELLINGEN PANEEL -->
@@ -503,11 +512,11 @@
             <div class="settings-section-title">🎮 Game Opties</div>
 
             <div class="setting-row">
-                <label>Moeilijkheidsgraad Keeper</label>
+                <label>Keeper Snelheid</label>
                 <select id="difficulty-select">
-                    <option value="easy">Makkelijk (Trage keeper)</option>
-                    <option value="medium" selected>Gemiddeld (Normaal)</option>
-                    <option value="hard">Moeilijk (Pro keeper)</option>
+                    <option value="easy">Makkelijk (Trager)</option>
+                    <option value="medium" selected>Normal</option>
+                    <option value="hard">Pro Keeper (Snel)</option>
                 </select>
             </div>
 
@@ -528,8 +537,8 @@
             <!-- OVER MIJ -->
             <div id="over-mij" class="page active">
                 <h1 id="welcome-title">👋 Welkom!</h1>
-                <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website kun je penalty's & vrije trappen nemen en het actuele weer bekijken!</p>
-                <p>Gebruik de knop <strong>Instellingen rechtsboven</strong> om de stadsachtergrond, thema's en voorkeuren aan te passen.</p>
+                <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website kun je penalty's nemen door met je vinger of muis de bal in het doel te vegen!</p>
+                <p>Gebruik de knop <strong>Instellingen rechtsboven</strong> om de thema's en voorkeuren aan te passen.</p>
             </div>
 
             <!-- ACTUEEL WEER -->
@@ -540,13 +549,11 @@
                     <div id="weather-status">Weergegevens laden...</div>
                     <div id="weather-details" style="display: none;">
                         
-                        <!-- Schakelknoppen binnen het weertabblad -->
                         <div class="weather-nav-btns">
                             <button id="btn-view-today" class="active" onclick="switchWeatherTab('today')">Vandaag & Morgen</button>
                             <button id="btn-view-weekly" onclick="switchWeatherTab('weekly')">📈 Weekverwachting (Grafiek)</button>
                         </div>
 
-                        <!-- Weergave 1: Vandaag, Morgen & Weekgemiddelden -->
                         <div id="weather-view-today">
                             <p><strong>Nu Actueel:</strong></p>
                             <div class="weather-grid">
@@ -562,16 +569,14 @@
                                 <div class="weather-item">🌧️ <span id="rain-tom">-</span> mm</div>
                             </div>
 
-                            <!-- GEMIDDELDEN VAN HET WEER -->
                             <p style="margin-top: 15px;"><strong>📊 Weekgemiddelden (7 Dagen):</strong></p>
                             <div class="weather-grid">
-                                <div class="weather-item">🌡️️ Gem. Temp: <span id="temp-avg-week">-</span> °C</div>
+                                <div class="weather-item">🌡 Gem. Temp: <span id="temp-avg-week">-</span> °C</div>
                                 <div class="weather-item">📈 Gem. Max: <span id="temp-max-avg-week">-</span> °C</div>
-                                <div class="weather-item">🌧️ Gem. Neerslag: <span id="rain-avg-week">-</span> mm/dag</div>
+                                <div class="weather-item">🌧️️ Gem. Neerslag: <span id="rain-avg-week">-</span> mm/dag</div>
                             </div>
                         </div>
 
-                        <!-- Weergave 2: Weekgrafiek -->
                         <div id="weather-view-weekly" style="display: none;">
                             <p style="text-align: center; font-weight: 600; margin-bottom: 10px;">Temperatuurverwachting 7 Dagen (°C)</p>
                             <div style="position: relative; height: 220px; width: 100%;">
@@ -583,39 +588,30 @@
                 </div>
             </div>
 
-            <!-- PENALTY & VRIJE TRAPPEN GAME -->
+            <!-- GOOGLE STYLE SWIPE PENALTY GAME -->
             <div id="spelletjes" class="page">
-                <h1>⚽ Penalty & Vrije Trappen</h1>
-                <p>Klik op de gewenste plek in de goal om te schieten! Ontwijk de keeper en de muur bij vrije trappen.</p>
+                <h1>⚽ Swipe Penalty Game</h1>
+                <p>Veeg/sleep met je vinger of muis vanaf de bal omhoog richting het doel!</p>
                 
                 <div class="glass-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; margin-bottom: 10px;">
-                        <span>Modus: <span id="game-mode-label" style="color:var(--primary-color);">Penalty</span></span>
-                        <span>Score: <span id="penalty-score">0</span> / <span id="penalty-shots">0</span></span>
-                        <span id="game-feedback" style="color: var(--primary-color);">Klik in het doel om te schieten!</span>
+                    <div style="display: flex; justify-content: space-between; align-align: center; margin-bottom: 10px;">
+                        <span>Goals: <span id="penalty-goals" class="score-badge">0</span></span>
+                        <span>Streak: <span id="penalty-streak" class="score-badge">0</span> 🔥</span>
+                        <span id="game-feedback" style="font-weight: 600; color: var(--primary-color);">Veeg de bal om te schieten!</span>
                     </div>
 
-                    <!-- Penalty & Vrije Trap Veld -->
+                    <!-- Arena voor Swipe Penalty -->
                     <div id="penalty-arena">
                         <div id="goal-net">
                             <div id="goalkeeper">🧤</div>
+                            <div id="goal-line"></div>
                         </div>
-                        <div id="defender-wall" style="display:none;">🧍‍♂️🧍‍♂️🧍‍♂️</div>
+                        <div id="aim-line"></div>
                         <div id="soccer-ball">⚽</div>
                     </div>
 
-                    <!-- Knoppen & Besturing -->
-                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px; flex-wrap:wrap;">
-                        <button class="btn-action" onclick="setKickMode('penalty')">🎯 Penalty Modus</button>
-                        <button class="btn-action" onclick="setKickMode('freekick')">🧱 Vrije Trap Modus</button>
+                    <div style="display:flex; justify-content:center; margin-top:15px;">
                         <button class="btn-action" style="background:#ef4444;" onclick="resetPenaltyGame()">🔄 Reset Score</button>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <h3>🏆 Topscores (Per 10 Schoten)</h3>
-                        <ul id="penalty-leaderboard" class="leaderboard-list">
-                            <li><span>Geen scores opgeslagen</span></li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -629,49 +625,20 @@
         let weeklyChartInstance = null;
         let cachedDailyData = null;
 
-        // Uitgebreide lijst met stedenafbeeldingen
         const cityLandmarks = {
             'leiden': 'https://images.unsplash.com/photo-1584003564911-a7a321c84e1c?auto=format&fit=crop&w=1920&q=80',
             'amsterdam': 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=1920&q=80',
             'rotterdam': 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?auto=format&fit=crop&w=1920&q=80',
             'utrecht': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1920&q=80',
             'den haag': 'https://images.unsplash.com/photo-1588613254375-3852077f1c1f?auto=format&fit=crop&w=1920&q=80',
-            'the hague': 'https://images.unsplash.com/photo-1588613254375-3852077f1c1f?auto=format&fit=crop&w=1920&q=80',
             'eindhoven': 'https://images.unsplash.com/photo-1605809801269-3595561a298a?auto=format&fit=crop&w=1920&q=80',
-            'groningen': 'https://images.unsplash.com/photo-1616038318854-44a6bdf3b8cb?auto=format&fit=crop&w=1920&q=80',
-            'maastricht': 'https://images.unsplash.com/photo-1588702547919-26089e690ecc?auto=format&fit=crop&w=1920&q=80',
-            'haarlem': 'https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=1920&q=80',
-            'brussel': 'https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=1920&q=80',
-            'brussels': 'https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=1920&q=80',
-            'antwerpen': 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=1920&q=80',
             'londen': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1920&q=80',
-            'london': 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1920&q=80',
-            'parijs': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80',
-            'paris': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80',
-            'rome': 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80',
-            'berlijn': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1920&q=80',
-            'berlin': 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1920&q=80',
-            'madrid': 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1920&q=80',
-            'barcelona': 'https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1920&q=80',
-            'wenen': 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=1920&q=80',
-            'praag': 'https://images.unsplash.com/photo-1541849546-216549ae216d?auto=format&fit=crop&w=1920&q=80',
-            'lissabon': 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80',
-            'new york': 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1920&q=80',
-            'tokio': 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80',
-            'tokyo': 'https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1920&q=80',
-            'sydney': 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1920&q=80',
-            'dubai': 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1920&q=80'
+            'parijs': 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1920&q=80'
         };
 
-        // Achtergrondinstellingen toepassen
         function updateCityBackground(cityName) {
             const cleanCity = cityName.toLowerCase().trim();
-            let imgUrl = cityLandmarks[cleanCity];
-
-            if (!imgUrl) {
-                imgUrl = `https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1920&q=80`;
-            }
-
+            let imgUrl = cityLandmarks[cleanCity] || 'https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1920&q=80';
             document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${imgUrl}')`;
         }
 
@@ -680,7 +647,6 @@
             changeBg(currentBgStyle);
         }
 
-        // Modal openen/sluiten
         function toggleSettingsModal() {
             document.getElementById('settingsOverlay').classList.toggle('active');
         }
@@ -689,7 +655,6 @@
             if (e.target.id === 'settingsOverlay') toggleSettingsModal();
         }
 
-        // Pagina Wisselen
         function showPage(pageId, event) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -705,7 +670,6 @@
             }
         }
 
-        // Weertabblad interne wissel (Vandaag vs Grafiek)
         function switchWeatherTab(view) {
             const todayView = document.getElementById('weather-view-today');
             const weeklyView = document.getElementById('weather-view-weekly');
@@ -729,22 +693,13 @@
             }
         }
 
-        // Instellingen Logica
         function changeTheme(theme) {
-            if (theme === 'dark') {
-                document.body.classList.add('dark-mode');
-            } else if (theme === 'light') {
-                document.body.classList.remove('dark-mode');
-            } else if (theme === 'auto') {
+            if (theme === 'dark') document.body.classList.add('dark-mode');
+            else if (theme === 'light') document.body.classList.remove('dark-mode');
+            else if (theme === 'auto') {
                 const hour = new Date().getHours();
-                if (hour >= 19 || hour < 7) {
-                    document.body.classList.add('dark-mode');
-                } else {
-                    document.body.classList.remove('dark-mode');
-                }
-            }
-            if (cachedDailyData && document.getElementById('weather-view-weekly').style.display !== 'none') {
-                renderWeeklyChart(cachedDailyData);
+                if (hour >= 19 || hour < 7) document.body.classList.add('dark-mode');
+                else document.body.classList.remove('dark-mode');
             }
         }
 
@@ -756,17 +711,14 @@
         function changeBg(type) {
             currentBgStyle = type;
             document.body.classList.remove('bg-pattern', 'bg-animated');
-
-            const isWeatherPage = document.getElementById('weer').classList.contains('active');
-            if (!isWeatherPage) {
+            if (!document.getElementById('weer').classList.contains('active')) {
                 if (type === 'pattern') document.body.classList.add('bg-pattern');
                 if (type === 'animated') document.body.classList.add('bg-animated');
             }
         }
 
         function updateUsername(name) {
-            const title = document.getElementById('welcome-title');
-            title.innerText = name.trim() !== "" ? `👋 Welkom, ${name}!` : "👋 Welkom!";
+            document.getElementById('welcome-title').innerText = name.trim() !== "" ? `👋 Welkom, ${name}!` : "👋 Welkom!";
         }
 
         function saveCity() {
@@ -781,9 +733,8 @@
             }
         }
 
-        // Weer via Geocoding + Open-Meteo
         async function fetchCityWeather(cityName) {
-            document.getElementById('weather-city-title').innerText = `🌤️ Weer in ${cityName}`;
+            document.getElementById('weather-city-title').innerText = `🌤️️ Weer in ${cityName}`;
             const statusText = document.getElementById('weather-status');
             const detailsDiv = document.getElementById('weather-details');
 
@@ -792,16 +743,14 @@
                 const geoData = await geoRes.json();
 
                 if (!geoData.results || geoData.results.length === 0) {
-                    statusText.innerText = "Stad niet gevonden. Controleer de spelling.";
+                    statusText.innerText = "Stad niet gevonden.";
                     return;
                 }
 
                 const { latitude, longitude } = geoData.results[0];
-
                 const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Europe%2FAmsterdam`);
                 const weatherData = await weatherRes.json();
 
-                // Nu & Morgen vullen
                 document.getElementById('temp-now').innerText = weatherData.current.temperature_2m;
                 document.getElementById('rain-now').innerText = weatherData.current.rain;
                 document.getElementById('wind-now').innerText = weatherData.current.wind_speed_10m;
@@ -810,7 +759,6 @@
                 document.getElementById('temp-min-tom').innerText = weatherData.daily.temperature_2m_min[1];
                 document.getElementById('rain-tom').innerText = weatherData.daily.rain_sum[1];
 
-                // --- BEREKENING VAN GEMIDDELDEN OVER DE KOMENDE WEEK ---
                 const maxTemps = weatherData.daily.temperature_2m_max;
                 const minTemps = weatherData.daily.temperature_2m_min;
                 const rainSums = weatherData.daily.rain_sum;
@@ -824,213 +772,207 @@
                 document.getElementById('temp-max-avg-week').innerText = avgMax;
                 document.getElementById('rain-avg-week').innerText = avgRain;
 
-                // Data opslaan voor weekgrafiek
                 cachedDailyData = weatherData.daily;
-
                 statusText.style.display = "none";
                 detailsDiv.style.display = "block";
-
-                if (document.getElementById('weather-view-weekly').style.display !== 'none') {
-                    renderWeeklyChart(cachedDailyData);
-                }
             } catch (err) {
                 statusText.innerText = "Kon weerbericht niet ophalen.";
             }
         }
 
-        // Chart.js Grafiek Genereren
         function renderWeeklyChart(dailyData) {
             const ctx = document.getElementById('weeklyChart').getContext('2d');
-
-            const labels = dailyData.time.map(d => {
-                const date = new Date(d);
-                return date.toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric' });
-            });
-
+            const labels = dailyData.time.map(d => new Date(d).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric' }));
             const isDark = document.body.classList.contains('dark-mode');
             const textColor = isDark ? '#f8fafc' : '#0f172a';
 
-            if (weeklyChartInstance) {
-                weeklyChartInstance.destroy();
-            }
+            if (weeklyChartInstance) weeklyChartInstance.destroy();
 
             weeklyChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'Max Temp (°C)',
-                            data: dailyData.temperature_2m_max,
-                            borderColor: '#ef4444',
-                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: 'Min Temp (°C)',
-                            data: dailyData.temperature_2m_min,
-                            borderColor: '#0284c7',
-                            backgroundColor: 'rgba(2, 132, 199, 0.2)',
-                            tension: 0.3,
-                            fill: true
-                        }
+                        { label: 'Max Temp (°C)', data: dailyData.temperature_2m_max, borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)', tension: 0.3, fill: true },
+                        { label: 'Min Temp (°C)', data: dailyData.temperature_2m_min, borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.2)', tension: 0.3, fill: true }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: textColor } }
-                    },
+                    plugins: { legend: { labels: { color: textColor } } },
                     scales: {
-                        x: {
-                            ticks: { color: textColor },
-                            grid: { color: 'rgba(255,255,255,0.1)' }
-                        },
-                        y: {
-                            ticks: { color: textColor },
-                            grid: { color: 'rgba(255,255,255,0.1)' }
-                        }
+                        x: { ticks: { color: textColor }, grid: { color: 'rgba(255,255,255,0.1)' } },
+                        y: { ticks: { color: textColor }, grid: { color: 'rgba(255,255,255,0.1)' } }
                     }
                 }
             });
         }
 
         /* -------------------------------------------------------------
-           PENALTY & VRIJE TRAPPEN GAME ENGINE
+           SWIPE & DRAG PENALTY GAME ENGINE (GOOGLE PENALTY STYLE)
         ------------------------------------------------------------- */
-        let kickMode = 'penalty'; // 'penalty' of 'freekick'
-        let penaltyScore = 0;
-        let penaltyShots = 0;
+        const arena = document.getElementById('penalty-arena');
+        const ball = document.getElementById('soccer-ball');
+        const keeper = document.getElementById('goalkeeper');
+        const goalNet = document.getElementById('goal-net');
+        const feedback = document.getElementById('game-feedback');
+
+        let totalGoals = 0;
+        let streak = 0;
         let isShooting = false;
+        let isDragging = false;
+        let startX = 0, startY = 0;
 
-        function setKickMode(mode) {
-            kickMode = mode;
-            document.getElementById('game-mode-label').innerText = mode === 'penalty' ? 'Penalty' : 'Vrije Trap (Muur)';
-            document.getElementById('defender-wall').style.display = mode === 'freekick' ? 'block' : 'none';
-            resetBall();
+        // Touch & Mouse Event Listeners op de bal
+        ball.addEventListener('mousedown', startDrag);
+        ball.addEventListener('touchstart', startDrag, { passive: false });
+
+        window.addEventListener('mousemove', dragMove);
+        window.addEventListener('touchmove', dragMove, { passive: false });
+
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
+
+        function getPos(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
         }
 
-        function resetBall() {
-            const ball = document.getElementById('soccer-ball');
-            const keeper = document.getElementById('goalkeeper');
-            
-            ball.style.transition = 'none';
-            ball.style.top = '';
-            ball.style.bottom = '15px';
-            ball.style.left = '50%';
-            ball.style.transform = 'translateX(-50%) scale(1)';
-            
-            keeper.style.transition = 'all 0.3s ease';
-            keeper.style.left = '45%';
-            keeper.style.bottom = '0px';
-            
-            isShooting = false;
-        }
-
-        document.getElementById('penalty-arena').addEventListener('click', function(e) {
+        function startDrag(e) {
             if (isShooting) return;
+            e.preventDefault();
+            isDragging = true;
+            const pos = getPos(e);
+            startX = pos.x;
+            startY = pos.y;
+        }
 
-            const rect = this.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
+        function dragMove(e) {
+            if (!isDragging || isShooting) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            const dx = pos.x - startX;
+            const dy = pos.y - startY;
 
-            const goalNet = document.getElementById('goal-net');
-            const goalRect = goalNet.getBoundingClientRect();
-            const goalLeft = goalRect.left - rect.left;
-            const goalRight = goalRect.right - rect.left;
-            const goalTop = goalRect.top - rect.top;
-            const goalBottom = goalRect.bottom - rect.top;
+            // Alleen visuele verschuiving tijdens slepen voor gevoel van controle
+            if (dy < 0) {
+                ball.style.transform = `translate(calc(-50% + ${dx * 0.3}px), ${dy * 0.3}px) scale(0.95)`;
+            }
+        }
 
+        function endDrag(e) {
+            if (!isDragging || isShooting) return;
+            isDragging = false;
+
+            const pos = e.changedTouches ? { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY } : { x: e.clientX, y: e.clientY };
+            const dx = pos.x - startX;
+            const dy = pos.y - startY;
+
+            // Controleer of de veeg omhoog was en lang genoeg
+            if (dy < -25) {
+                shootBall(dx, dy);
+            } else {
+                // Herstel positie als veeg te kort was
+                ball.style.transition = 'all 0.2s ease';
+                ball.style.transform = 'translate(-50%, 0) scale(1)';
+            }
+        }
+
+        function shootBall(dx, dy) {
             isShooting = true;
-            penaltyShots++;
 
-            const ball = document.getElementById('soccer-ball');
-            const keeper = document.getElementById('goalkeeper');
-            const feedback = document.getElementById('game-feedback');
+            const arenaRect = arena.getBoundingClientRect();
+            const goalRect = goalNet.getBoundingClientRect();
 
-            // Bal naar gekozen punt laten vliegen
-            ball.style.transition = 'all 0.4s cubic-bezier(0.1, 0.6, 0.3, 1)';
-            ball.style.left = clickX + 'px';
-            ball.style.top = clickY + 'px';
-            ball.style.transform = 'translate(-50%, -50%) scale(0.65)';
+            // Bereken doelwitteken op basis van de veegrichting en kracht
+            const targetX = (arenaRect.width / 2) + (dx * 1.6);
+            const targetY = goalRect.top - arenaRect.top + 30 + Math.max(-40, dy * 0.2);
 
-            // Keeper AI & Beweging
+            // Bepaal vluchttijd op basis van veegsnelheid
+            const flightTime = Math.min(0.6, Math.max(0.3, 100 / Math.abs(dy)));
+
+            // Animeer Bal Schot
+            ball.style.transition = `all ${flightTime}s cubic-bezier(0.1, 0.5, 0.3, 1)`;
+            ball.style.left = `${targetX}px`;
+            ball.style.bottom = `${arenaRect.height - targetY}px`;
+            ball.style.transform = 'translate(-50%, 50%) scale(0.55)';
+
+            // AI Keeper beweging
             const diff = document.getElementById('difficulty-select').value;
-            let keeperChance = diff === 'easy' ? 0.35 : (diff === 'medium' ? 0.6 : 0.85);
+            let keeperSpeed = diff === 'easy' ? 0.4 : (diff === 'medium' ? 0.7 : 0.9);
 
-            let keeperTargetXPercent = Math.random() * 80 + 10;
-            if (Math.random() < keeperChance && clickX >= goalLeft && clickX <= goalRight) {
-                keeperTargetXPercent = ((clickX - goalLeft) / (goalRight - goalLeft)) * 100;
+            // Keeper duikt naar een hoek (soms slimmere reactie naar de bal)
+            let keeperTargetPercent = 50;
+            if (Math.random() < keeperSpeed) {
+                // Keeper voorspelt richting
+                const goalWidth = goalRect.width;
+                const relativeBallX = targetX - (goalRect.left - arenaRect.left);
+                keeperTargetPercent = Math.max(10, Math.min(90, (relativeBallX / goalWidth) * 100));
+            } else {
+                // Willekeurige duik
+                keeperTargetPercent = Math.random() * 80 + 10;
             }
 
-            keeper.style.left = keeperTargetXPercent + '%';
-            keeper.style.bottom = (Math.random() * 50) + 'px';
+            keeper.style.left = `${keeperTargetPercent}%`;
 
-            // Resultaat berekenen na schot
+            // Schotresultaat verwerken
             setTimeout(() => {
-                const isInsideGoal = clickX >= goalLeft && clickX <= goalRight && clickY >= goalTop && clickY <= goalBottom;
+                const goalLeft = goalRect.left - arenaRect.left;
+                const goalRight = goalRect.right - arenaRect.left;
+                const goalTop = goalRect.top - arenaRect.top;
+                const goalBottom = goalRect.bottom - arenaRect.top;
 
-                // Muur blokkade check (bij Vrije Trap)
-                let hitWall = false;
-                if (kickMode === 'freekick') {
-                    const wall = document.getElementById('defender-wall');
-                    const wallRect = wall.getBoundingClientRect();
-                    const wallL = wallRect.left - rect.left;
-                    const wallR = wallRect.right - rect.left;
-                    const wallT = wallRect.top - rect.top;
-                    const wallB = wallRect.bottom - rect.top;
+                const isInsideGoal = targetX >= goalLeft + 15 && targetX <= goalRight - 15 && targetY >= goalTop && targetY <= goalBottom + 40;
 
-                    if (clickX >= wallL && clickX <= wallR && clickY >= wallT && clickY <= wallB) {
-                        hitWall = true;
-                    }
-                }
-
-                // Afstand tot keeper check
-                const keeperRect = keeper.getBoundingClientRect();
-                const keeperCenterX = keeperRect.left + keeperRect.width / 2 - rect.left;
-                const keeperCenterY = keeperRect.top + keeperRect.height / 2 - rect.top;
-                const distToKeeper = Math.hypot(clickX - keeperCenterX, clickY - keeperCenterY);
+                // Afstand tussen bal en keeper
+                const keeperX = goalLeft + (goalRect.width * (keeperTargetPercent / 100));
+                const distToKeeper = Math.abs(targetX - keeperX);
 
                 if (!isInsideGoal) {
                     feedback.innerText = "❌ Naast of over geschoten!";
                     feedback.style.color = "#ef4444";
-                } else if (hitWall) {
-                    feedback.innerText = "🧱 Afgeketst op de muur!";
-                    feedback.style.color = "#f97316";
-                } else if (distToKeeper < 42) {
+                    streak = 0;
+                } else if (distToKeeper < 40) {
                     feedback.innerText = "🧤 Gered door de keeper!";
                     feedback.style.color = "#f97316";
+                    streak = 0;
                 } else {
-                    penaltyScore++;
+                    totalGoals++;
+                    streak++;
                     feedback.innerText = "⚽ GOAAAAL!";
                     feedback.style.color = "#10b981";
                     playSound();
                 }
 
-                document.getElementById('penalty-score').innerText = penaltyScore;
-                document.getElementById('penalty-shots').innerText = penaltyShots;
+                document.getElementById('penalty-goals').innerText = totalGoals;
+                document.getElementById('penalty-streak').innerText = streak;
 
-                // Na elke 10 schoten opslaan in leaderboard
-                if (penaltyShots % 10 === 0) {
-                    setTimeout(() => {
-                        const name = prompt(`Ronde van 10 schoten voorbij! Je score: ${penaltyScore}/10. Vul je naam in:`);
-                        if (name) savePenaltyScore(name, penaltyScore);
-                    }, 200);
-                }
+                // Bal terugleggen voor volgende penalty
+                setTimeout(resetBall, 1200);
+            }, flightTime * 1000);
+        }
 
-                // Bal klaarleggen voor volgend schot
-                setTimeout(resetBall, 1300);
-            }, 400);
-        });
+        function resetBall() {
+            ball.style.transition = 'none';
+            ball.style.left = '50%';
+            ball.style.bottom = '20px';
+            ball.style.transform = 'translate(-50%, 0) scale(1)';
+
+            keeper.style.transition = 'all 0.3s ease';
+            keeper.style.left = '50%';
+
+            isShooting = false;
+        }
 
         function resetPenaltyGame() {
-            penaltyScore = 0;
-            penaltyShots = 0;
-            document.getElementById('penalty-score').innerText = '0';
-            document.getElementById('penalty-shots').innerText = '0';
-            document.getElementById('game-feedback').innerText = 'Klik in het doel om te schieten!';
+            totalGoals = 0;
+            streak = 0;
+            document.getElementById('penalty-goals').innerText = '0';
+            document.getElementById('penalty-streak').innerText = '0';
+            document.getElementById('game-feedback').innerText = 'Veeg de bal om te schieten!';
             resetBall();
         }
 
@@ -1041,31 +983,9 @@
                 osc.connect(ctx.destination);
                 osc.frequency.value = 520;
                 osc.start();
-                osc.stop(ctx.currentTime + 0.1);
+                osc.stop(ctx.currentTime + 0.12);
             }
         }
-
-        function savePenaltyScore(name, score) {
-            let scores = JSON.parse(localStorage.getItem('penalty_scores') || '[]');
-            scores.push({ name, score, date: new Date().toLocaleDateString('nl-NL') });
-            scores.sort((a, b) => b.score - a.score);
-            scores = scores.slice(0, 5);
-            localStorage.setItem('penalty_scores', JSON.stringify(scores));
-            renderPenaltyLeaderboard();
-        }
-
-        function renderPenaltyLeaderboard() {
-            let scores = JSON.parse(localStorage.getItem('penalty_scores') || '[]');
-            const list = document.getElementById('penalty-leaderboard');
-            if (!list) return;
-            if (scores.length === 0) {
-                list.innerHTML = '<li><span>Geen scores opgeslagen</span></li>';
-                return;
-            }
-                list.innerHTML = scores.map(s => `<li><span>${s.name} (${s.date})</span><strong>${s.score} / 10 pt</strong></li>`).join('');
-        }
-
-        renderPenaltyLeaderboard();
     </script>
 </body>
-</html>
+</html>u
