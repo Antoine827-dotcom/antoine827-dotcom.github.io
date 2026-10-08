@@ -2,1145 +2,1148 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>website</title>
-    <!-- Chart.js voor de weekgrafiek -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Antoine - Informatica Website</title>
+
+    <!-- Het externe CSS-bestand bevat alle opmaak van de website. -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js wordt gebruikt voor de grafiek op de weerpagina. -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --primary-color: #0284c7;
-            --primary-hover: #0369a1;
-            --accent-bg: rgba(56, 189, 248, 0.15);
-            --bg-gradient: radial-gradient(circle at 20% 20%, #f8fafc 0%, #e2e8f0 100%);
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-card: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.9);
-            --text-color: #0f172a;
-            --subtext-color: #334155;
-            --nav-bg: rgba(255, 255, 255, 0.55);
-        }
-
-        body.dark-mode {
-            --bg-gradient: radial-gradient(circle at 20% 20%, #0f172a 0%, #020617 100%);
-            --glass-bg: rgba(15, 23, 42, 0.75);
-            --glass-card: rgba(30, 41, 59, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --text-color: #f8fafc;
-            --subtext-color: #cbd5e1;
-            --nav-bg: rgba(15, 23, 42, 0.75);
-        }
-
-        body.bg-pattern {
-            background-image: radial-gradient(rgba(0, 0, 0, 0.15) 1px, transparent 1px) !important;
-            background-size: 20px 20px !important;
-        }
-
-        body.dark-mode.bg-pattern {
-            background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px) !important;
-        }
-
-        body.bg-animated {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab) !important;
-            background-size: 400% 400% !important;
-            animation: gradientBG 15s ease infinite !important;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-color);
-            display: flex;
-            min-height: 100vh;
-            transition: background 0.5s ease, color 0.3s ease;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        /* Navigatiebalk links */
-        nav {
-            width: 240px;
-            background: var(--nav-bg);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border-right: 1px solid var(--glass-border);
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 10;
-        }
-
-        nav button {
-            background: rgba(255, 255, 255, 0.25);
-            color: var(--text-color);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            padding: 14px 18px;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        nav button:hover {
-            background: rgba(255, 255, 255, 0.45);
-            transform: translateY(-1px);
-        }
-
-        nav button.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.3);
-        }
-
-        /* Instellingen-knop Rechtsboven */
-        .settings-top-btn {
-            position: fixed;
-            top: 20px;
-            right: 25px;
-            background: var(--glass-card);
-            color: var(--text-color);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-            z-index: 90;
-        }
-
-        .settings-top-btn:hover {
-            transform: scale(1.03);
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Instellingen Modal */
-        .settings-modal-overlay {
-            position: fixed;
-            top: 0; right: 0; bottom: 0; left: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(6px);
-            display: none;
-            justify-content: flex-end;
-            z-index: 100;
-        }
-
-        .settings-modal-overlay.active {
-            display: flex;
-        }
-
-        .settings-panel {
-            width: 100%;
-            max-width: 420px;
-            height: 100%;
-            background: var(--glass-card);
-            backdrop-filter: blur(30px) saturate(190%);
-            -webkit-backdrop-filter: blur(30px) saturate(190%);
-            border-left: 1px solid var(--glass-border);
-            padding: 30px;
-            overflow-y: auto;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 15px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .settings-section-title {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .setting-row {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 14px;
-        }
-
-        .setting-row label {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        input[type="text"], select {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.3);
-            color: var(--text-color);
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        .color-options {
-            display: flex;
-            gap: 12px;
-        }
-
-        .color-dot {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease;
-        }
-
-        .color-dot:hover {
-            transform: scale(1.15);
-        }
-
-        /* Layout Hoofdinhoud */
-        main {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .main-oval {
-            width: 100%;
-            max-width: 880px;
-            min-height: 560px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(30px) saturate(190%);
-            -webkit-backdrop-filter: blur(30px) saturate(190%);
-            border: 1px solid var(--glass-border);
-            border-radius: 36px;
-            padding: 40px 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        .page {
-            display: none;
-            width: 100%;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        h1 {
-            margin-bottom: 12px;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
-
-        h2 {
-            margin-top: 15px;
-            margin-bottom: 8px;
-            font-size: 1.4rem;
-        }
-
-        p {
-            color: var(--subtext-color);
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .glass-card {
-            background: var(--glass-card);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(16px);
-            padding: 24px;
-            border-radius: 20px;
-            margin-top: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            text-align: left;
-        }
-
-        /* School HTML Vereiste Stijlen */
-        .school-box {
-            text-align: left;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px dashed var(--primary-color);
-            padding: 20px;
-            border-radius: 16px;
-            margin-top: 20px;
-        }
-
-        .school-box ul {
-            margin-left: 25px;
-            margin-top: 10px;
-            line-height: 1.8;
-        }
-
-        /* Weer Layout */
-        .weather-grid {
-            display: flex;
-            justify-content: space-around;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .weather-item {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 12px 10px;
-            border-radius: 14px;
-            border: 1px solid var(--glass-border);
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .weather-nav-btns {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .weather-nav-btns button {
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid var(--glass-border);
-            color: var(--text-color);
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .weather-nav-btns button.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        /* --- HIGH-QUALITY 3D PENALTY GAME ARENA --- */
-        #penalty-arena {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            background: linear-gradient(180deg, #1e3a8a 0%, #15803d 35%, #166534 100%);
-            border-radius: 24px;
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            overflow: hidden;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5), 0 15px 30px rgba(0,0,0,0.2);
-            margin-top: 10px;
-            user-select: none;
-            touch-action: none;
-            cursor: crosshair;
-        }
-
-        /* Grasmat Lijnen & Strafschopgebied */
-        .pitch-lines {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .penalty-box-line {
-            position: absolute;
-            top: 20%;
-            left: 15%;
-            width: 70%;
-            height: 80%;
-            border: 3px solid rgba(255, 255, 255, 0.4);
-            border-bottom: none;
-        }
-
-        .penalty-spot {
-            position: absolute;
-            bottom: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255,255,255,0.8);
-        }
-
-        /* Realistisch 3D Doel & Net */
-        #goal-frame {
-            position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 72%;
-            height: 140px;
-            border: 8px solid #f8fafc;
-            border-bottom: none;
-            border-radius: 6px 6px 0 0;
-            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 2px, transparent 2px, transparent 10px),
-                        repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0px, rgba(255,255,255,0.15) 2px, transparent 2px, transparent 10px);
-            background-color: rgba(0, 0, 0, 0.25);
-            box-shadow: inset 0 10px 25px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Target zones in goal voor duidelijke kliks/schoten */
-        .goal-target-grid {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            z-index: 2;
-        }
-
-        .target-zone {
-            transition: background 0.15s ease;
-        }
-
-        .target-zone:hover {
-            background: rgba(56, 189, 248, 0.2);
-            cursor: pointer;
-        }
-
-        /* Realistische SVG Keeper */
-        #goalkeeper-wrapper {
-            position: absolute;
-            bottom: 0px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90px;
-            height: 110px;
-            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 3;
-            pointer-events: none;
-            filter: drop-shadow(0 10px 8px rgba(0,0,0,0.5));
-        }
-
-        /* Voetbal & Schot-animaties */
-        #soccer-ball {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translate(-50%, 0) scale(1) rotate(0deg);
-            width: 44px;
-            height: 44px;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #cbd5e1 70%, #475569 100%);
-            border-radius: 50%;
-            box-shadow: 0 10px 15px rgba(0,0,0,0.5), inset -3px -3px 8px rgba(0,0,0,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            cursor: grab;
-            z-index: 5;
-            user-select: none;
-        }
-
-        #soccer-ball:active {
-            cursor: grabbing;
-        }
-
-        /* Richtvizier & Trajectlijn */
-        #aim-target {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 2px dashed #38bdf8;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            display: none;
-            z-index: 4;
-            animation: pulseTarget 1s infinite alternate;
-        }
-
-        @keyframes pulseTarget {
-            from { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
-            to { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        }
-
-        .btn-action {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-
-        .btn-action:hover {
-            background: var(--primary-hover);
-        }
-
-        .score-badge {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--primary-color);
-        }
-    </style>
 </head>
+
 <body>
 
-    <!-- Knop Rechtsboven voor Instellingen -->
-    <button class="settings-top-btn" onclick="toggleSettingsModal()">
-        <span>⚙️</span> Instellingen
-    </button>
+    <!-- =========================================================
+         LINKER MENU
+         Het menu bestaat uit een ul met li-elementen.
+         Elke li bevat een a-element waarmee een pagina wordt geopend.
+         ========================================================= -->
 
-    <!-- Navigatiebalk -->
-    <nav>
-        <button onclick="showPage('over-mij', event)" class="active"><span>👤</span> Over mij</button>
-        <button onclick="showPage('weer', event)"><span>🌤️️</span> Weerbericht</button>
-        <button onclick="showPage('spelletjes', event)"><span>⚽</span> Penalty Game</button>
-    </nav>
+    <aside class="sidebar">
 
-    <!-- INSTELLINGEN PANEEL -->
-    <div class="settings-modal-overlay" id="settingsOverlay" onclick="closeSettingsOuter(event)">
-        <div class="settings-panel">
-            <div class="settings-header">
-                <h2>⚙️ Instellingen</h2>
-                <button class="close-btn" onclick="toggleSettingsModal()">✕</button>
-            </div>
-
-            <!-- Visueel Thema -->
-            <div class="settings-section-title">🎨 Visueel Thema</div>
-            
-            <div class="setting-row">
-                <label>Thema Modus</label>
-                <select id="theme-select" onchange="changeTheme(this.value)">
-                    <option value="light">Licht Thema</option>
-                    <option value="dark">Donker Thema</option>
-                    <option value="auto">Automatisch (Zonsondergang)</option>
-                </select>
-            </div>
-
-            <div class="setting-row">
-                <label>Accentkleur</label>
-                <div class="color-options">
-                    <div class="color-dot" style="background:#0284c7;" onclick="setAccent('#0284c7', '#0369a1')"></div>
-                    <div class="color-dot" style="background:#10b981;" onclick="setAccent('#10b981', '#059669')"></div>
-                    <div class="color-dot" style="background:#f97316;" onclick="setAccent('#f97316', '#ea580c')"></div>
-                    <div class="color-dot" style="background:#8b5cf6;" onclick="setAccent('#8b5cf6', '#7c3aed')"></div>
-                </div>
-            </div>
-
-            <div class="setting-row">
-                <label>Achtergrondstijl</label>
-                <select id="bg-style-select" onchange="changeBg(this.value)">
-                    <option value="clean">Minimalistisch</option>
-                    <option value="pattern">Subtiel Patroon</option>
-                    <option value="animated">Geanimeerd Verloop</option>
-                </select>
-            </div>
-
-            <!-- Personalisatie -->
-            <div class="settings-section-title">🌐 Personalisatie</div>
-
-            <div class="setting-row">
-                <label>Jouw Naam</label>
-                <input type="text" id="username-input" placeholder="Vul je naam in..." oninput="updateUsername(this.value)">
-            </div>
-
-            <div class="setting-row">
-                <label>Stad Weerbericht</label>
-                <div style="display:flex; gap:6px;">
-                    <input type="text" id="city-input" value="Leiden" placeholder="Bijv. Londen, Parijs, Berlijn">
-                    <button class="btn-action" style="margin-top:0; padding: 8px 12px;" onclick="saveCity()">Opslaan</button>
-                </div>
-            </div>
-
-            <!-- Game Opties -->
-            <div class="settings-section-title">🎮 Game Opties</div>
-
-            <div class="setting-row">
-                <label>Keeper Niveau</label>
-                <select id="difficulty-select">
-                    <option value="easy">Makkelijk (Minder snelle reactie)</option>
-                    <option value="medium" selected>Normaal</option>
-                    <option value="hard">Pro Keeper (Sterke reflexes)</option>
-                </select>
-            </div>
-
-            <div class="setting-row">
-                <label>Geluidseffecten</label>
-                <select id="sound-toggle">
-                    <option value="on">Aan 🔊</option>
-                    <option value="off">Uit 🔇</option>
-                </select>
-            </div>
+        <!-- Logo/titel van de website -->
+        <div class="logo">
+            <span>💻</span>
+            <h2>Mijn website</h2>
         </div>
-    </div>
 
-    <!-- Hoofdinhoud -->
-    <main>
-        <div class="main-oval">
-            
-            <!-- OVER MIJ (Inclusief de verplichte HTML voor school) -->
-            <div id="over-mij" class="page active">
-                <h1 id="welcome-title">👋 Welkom!</h1>
-                <p>Ik ben Antoine, mijn hobby's zijn voetbal spelen en gamen. Op deze website vind je mijn schoolopdracht, het actuele weer en een vernieuwde penalty game!</p>
+        <!-- Navigatiemenu -->
+        <ul class="menu">
 
-                <!-- VEREISTE HTML STRUCTUUR VOOR SCHOOL -->
-                <div class="school-box">
-                    <h1>dit is mijn website</h1>
-                    <h2>lijst</h2>
-                    <ul>
-                        <li><b>vet</b></li>
-                        <li><i>cursief</i></li>
-                        <li><u>onderstreept</u></li>
-                        <li style="color: red;">tekstkleur</li>
-                        <li style="font-size: 20px;">tekstgrootte</li>
-                    </ul>
-                </div>
-            </div>
+            <!-- Link naar de homepage / Over mij -->
+            <li>
+                <a href="#" class="nav-link active" data-page="home">
+                    👤 <span>Over mij</span>
+                </a>
+            </li>
 
-            <!-- ACTUEEL WEER -->
-            <div id="weer" class="page">
-                <h1 id="weather-city-title">🌤️ Weerbericht</h1>
-                
-                <div class="glass-card">
-                    <div id="weather-status">Weergegevens laden...</div>
-                    <div id="weather-details" style="display: none;">
-                        
-                        <div class="weather-nav-btns">
-                            <button id="btn-view-today" class="active" onclick="switchWeatherTab('today')">Vandaag & Morgen</button>
-                            <button id="btn-view-weekly" onclick="switchWeatherTab('weekly')">📈 Weekverwachting (Grafiek)</button>
-                        </div>
+            <!-- Link naar het weerbericht -->
+            <li>
+                <a href="#" class="nav-link" data-page="weather">
+                    🌤️ <span>Weerbericht</span>
+                </a>
+            </li>
 
-                        <div id="weather-view-today">
-                            <p><strong>Nu Actueel:</strong></p>
-                            <div class="weather-grid">
-                                <div class="weather-item">🌡️ <span id="temp-now">-</span> °C</div>
-                                <div class="weather-item">🌧️ <span id="rain-now">-</span> mm</div>
-                                <div class="weather-item">💨 <span id="wind-now">-</span> km/h</div>
-                            </div>
+            <!-- Link naar het kleurmodellen-onderdeel -->
+            <li>
+                <a href="#" class="nav-link" data-page="colors">
+                    🎨 <span>Kleurmodellen</span>
+                </a>
+            </li>
 
-                            <p style="margin-top: 15px;"><strong>Morgen:</strong></p>
-                            <div class="weather-grid">
-                                <div class="weather-item">📈 Max <span id="temp-max-tom">-</span> °C</div>
-                                <div class="weather-item">📉 Min <span id="temp-min-tom">-</span> °C</div>
-                                <div class="weather-item">🌧️ <span id="rain-tom">-</span> mm</div>
-                            </div>
+            <!-- Link naar het binaire stelsel -->
+            <li>
+                <a href="#" class="nav-link" data-page="binary">
+                    🔢 <span>Binair stelsel</span>
+                </a>
+            </li>
 
-                            <p style="margin-top: 15px;"><strong>📊 Weekgemiddelden (7 Dagen):</strong></p>
-                            <div class="weather-grid">
-                                <div class="weather-item">🌡 Gem. Temp: <span id="temp-avg-week">-</span> °C</div>
-                                <div class="weather-item">📈 Gem. Max: <span id="temp-max-avg-week">-</span> °C</div>
-                                <div class="weather-item">🌧 Gem. Neerslag: <span id="rain-avg-week">-</span> mm/dag</div>
-                            </div>
-                        </div>
+            <!-- Link naar compressie -->
+            <li>
+                <a href="#" class="nav-link" data-page="compression">
+                    🗜️ <span>Compressie</span>
+                </a>
+            </li>
 
-                        <div id="weather-view-weekly" style="display: none;">
-                            <p style="text-align: center; font-weight: 600; margin-bottom: 10px;">Temperatuurverwachting 7 Dagen (°C)</p>
-                            <div style="position: relative; height: 220px; width: 100%;">
-                                <canvas id="weeklyChart"></canvas>
-                            </div>
-                        </div>
+            <!-- Link naar AI -->
+            <li>
+                <a href="#" class="nav-link" data-page="ai">
+                    🤖 <span>AI</span>
+                </a>
+            </li>
 
-                    </div>
-                </div>
-            </div>
+            <!-- Link naar het penaltyspel -->
+            <li>
+                <a href="#" class="nav-link" data-page="game">
+                    ⚽ <span>Penalty Game</span>
+                </a>
+            </li>
+        </ul>
 
-            <!-- VERNIEUWDE PRO PENALTY GAME -->
-            <div id="spelletjes" class="page">
-                <h1>⚽ Pro Penalty Game</h1>
-                <p>Klik/tik direct in het doel (bovenhoek, onderhoek, midden) OF veeg met je vinger om precies te richten!</p>
-                
-                <div class="glass-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span>Goals: <span id="penalty-goals" class="score-badge">0</span></span>
-                        <span>Streak: <span id="penalty-streak" class="score-badge">0</span> 🔥</span>
-                        <span id="game-feedback" style="font-weight: 700; color: var(--primary-color);">Kies je hoek en schiet!</span>
-                    </div>
-
-                    <!-- Penalty Veld Arena -->
-                    <div id="penalty-arena">
-                        <div class="pitch-lines">
-                            <div class="penalty-box-line"></div>
-                            <div class="penalty-spot"></div>
-                        </div>
-
-                        <!-- Vizier -->
-                        <div id="aim-target"></div>
-
-                        <!-- Doel met Koppelbare Schotzones -->
-                        <div id="goal-frame">
-                            <div class="goal-target-grid">
-                                <div class="target-zone" onclick="shootToZone('top-left')" title="Bovenin Links"></div>
-                                <div class="target-zone" onclick="shootToZone('top-mid')" title="Bovenin Midden"></div>
-                                <div class="target-zone" onclick="shootToZone('top-right')" title="Bovenin Rechts"></div>
-                                <div class="target-zone" onclick="shootToZone('low-left')" title="Onderin Links"></div>
-                                <div class="target-zone" onclick="shootToZone('low-mid')" title="Onderin Midden"></div>
-                                <div class="target-zone" onclick="shootToZone('low-right')" title="Onderin Rechts"></div>
-                            </div>
-
-                            <!-- Echte SVG Keeper met Trui & Handschoenen -->
-                            <div id="goalkeeper-wrapper">
-                                <svg width="90" height="110" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <!-- Hoofd & Haar -->
-                                    <circle cx="50" cy="22" r="12" fill="#fbcfe8"/>
-                                    <path d="M40 18 C42 10, 58 10, 60 18 Z" fill="#1e293b"/>
-                                    <!-- Keeper Trui -->
-                                    <path d="M30 36 L70 36 L64 70 L36 70 Z" fill="#eab308"/>
-                                    <path d="M30 36 L15 50 L22 56 L34 44 Z" fill="#eab308"/>
-                                    <path d="M70 36 L85 50 L78 56 L66 44 Z" fill="#eab308"/>
-                                    <!-- Handschoenen -->
-                                    <circle cx="16" cy="54" r="7" fill="#0284c7"/>
-                                    <circle cx="84" cy="54" r="7" fill="#0284c7"/>
-                                    <!-- Broek & Benen -->
-                                    <path d="M36 70 L64 70 L60 88 L40 88 Z" fill="#0f172a"/>
-                                    <rect x="41" y="88" width="6" height="20" fill="#fbcfe8"/>
-                                    <rect x="53" y="88" width="6" height="20" fill="#fbcfe8"/>
-                                    <!-- Schoenen -->
-                                    <path d="M38 108 L47 108 L47 114 L36 114 Z" fill="#ffffff"/>
-                                    <path d="M53 108 L62 108 L64 114 L53 114 Z" fill="#ffffff"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <!-- Bal -->
-                        <div id="soccer-ball">⚽</div>
-                    </div>
-
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; flex-wrap:wrap; gap:10px;">
-                        <span style="font-size:0.9rem; color:var(--subtext-color);">💡 Klik op een hoek in het doel OF veeg de bal vanaf de stip.</span>
-                        <button class="btn-action" style="background:#ef4444;" onclick="resetPenaltyGame()">🔄 Reset Score</button>
-                    </div>
-                </div>
-            </div>
-
+        <!-- Kleine tekst onder het menu -->
+        <div class="sidebar-footer">
+            Informatica • 2026
         </div>
+    </aside>
+
+
+    <!-- =========================================================
+         HOOFDGEDEELTE
+         Hier wordt de inhoud van de verschillende pagina's getoond.
+         ========================================================= -->
+
+    <main class="main-content">
+
+        <!-- Instellingenknop rechtsboven -->
+        <button class="settings-button" id="openSettings" title="Instellingen">
+            ⚙️
+        </button>
+
+
+        <!-- =====================================================
+             HOMEPAGE
+             ===================================================== -->
+
+        <section id="home" class="page active-page">
+
+            <div class="hero-card">
+
+                <div>
+                    <span class="eyebrow">WELKOM OP MIJN WEBSITE</span>
+
+                    <h1>Hoi, ik ben <span id="displayName">Antoine</span> 👋</h1>
+
+                    <p class="hero-text">
+                        Welkom op mijn informaticawebsite. Hier vertel ik iets over
+                        mezelf en laat ik verschillende onderwerpen uit de
+                        informatica zien.
+                    </p>
+
+                    <button class="primary-button" onclick="showPage('weather')">
+                        Bekijk het weer →
+                    </button>
+                </div>
+
+                <div class="hero-icon">
+                    💻
+                </div>
+
+            </div>
+
+
+            <!-- Informatie over mij -->
+            <div class="content-grid">
+
+                <article class="glass-card">
+                    <span class="card-icon">👤</span>
+
+                    <h2>Over mij</h2>
+
+                    <p>
+                        Ik ben Antoine. Mijn hobby's zijn voetbal spelen en gamen.
+                        Op deze website combineer ik mijn interesses met wat ik
+                        leer bij informatica.
+                    </p>
+                </article>
+
+
+                <article class="glass-card">
+                    <span class="card-icon">⚽</span>
+
+                    <h2>Mijn hobby's</h2>
+
+                    <p>
+                        Een van mijn grootste hobby's is voetbal. Daarom heb ik
+                        ook een eigen penaltyspel op mijn website gemaakt.
+                    </p>
+                </article>
+
+
+                <article class="glass-card">
+                    <span class="card-icon">🎮</span>
+
+                    <h2>Gamen</h2>
+
+                    <p>
+                        Ik vind gamen leuk en daarom wilde ik ook interactieve
+                        onderdelen aan mijn website toevoegen.
+                    </p>
+                </article>
+
+            </div>
+
+
+            <!-- =================================================
+                 SCHOOL HTML-VOORBEELD
+                 Dit onderdeel laat verschillende HTML-opmaak zien.
+                 ================================================= -->
+
+            <div class="glass-card school-card">
+
+                <span class="eyebrow">HTML-VOORBEELD</span>
+
+                <h2>Dit is mijn website</h2>
+
+                <h3>lijst</h3>
+
+                <ul class="example-list">
+                    <li><strong>Dit is dikgedrukte tekst</strong></li>
+                    <li><em>Dit is cursieve tekst</em></li>
+                    <li><u>Dit is onderstreepte tekst</u></li>
+                    <li class="red-text">Dit is rode tekst</li>
+                    <li class="large-text">Dit is grotere tekst</li>
+                </ul>
+
+            </div>
+
+
+            <!-- =================================================
+                 INVOER - VERWERKING - UITVOER
+                 ================================================= -->
+
+            <div class="glass-card">
+
+                <span class="eyebrow">INFORMATICA</span>
+
+                <h2>Invoer → verwerking → uitvoer</h2>
+
+                <div class="ivo-grid">
+
+                    <div>
+                        <span class="ivo-number">01</span>
+                        <h3>Invoer</h3>
+                        <p>
+                            De gebruiker voert bijvoorbeeld zijn naam,
+                            plaats of instellingen in.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span class="ivo-number">02</span>
+                        <h3>Verwerking</h3>
+                        <p>
+                            JavaScript verwerkt de ingevoerde gegevens en
+                            haalt bijvoorbeeld weergegevens op.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span class="ivo-number">03</span>
+                        <h3>Uitvoer</h3>
+                        <p>
+                            Het resultaat wordt op het scherm weergegeven.
+                            Bijvoorbeeld de temperatuur of een score.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             WEER
+             ===================================================== -->
+
+        <section id="weather" class="page">
+
+            <div class="page-heading">
+                <span class="eyebrow">ACTUEEL WEER</span>
+                <h1>Weerbericht 🌤️</h1>
+                <p>
+                    Bekijk het actuele weer, de verwachting van morgen en
+                    het gemiddelde van de komende dagen.
+                </p>
+            </div>
+
+
+            <!-- Zoekveld voor een plaats -->
+            <div class="glass-card weather-search">
+
+                <label for="cityInput">Plaats</label>
+
+                <div class="input-row">
+
+                    <input
+                        type="text"
+                        id="cityInput"
+                        placeholder="Bijvoorbeeld Amsterdam"
+                    >
+
+                    <button class="primary-button" id="weatherButton">
+                        Zoek weer
+                    </button>
+
+                </div>
+
+                <p id="weatherStatus" class="status-text">
+                    Voer een plaats in om het weer te bekijken.
+                </p>
+
+            </div>
+
+
+            <!-- Weerkaarten -->
+            <div class="weather-grid">
+
+                <div class="weather-card">
+                    <span>🌡️</span>
+                    <p>Temperatuur</p>
+                    <strong id="currentTemp">-- °C</strong>
+                </div>
+
+                <div class="weather-card">
+                    <span>🌧️</span>
+                    <p>Neerslag</p>
+                    <strong id="currentRain">-- mm</strong>
+                </div>
+
+                <div class="weather-card">
+                    <span>💨</span>
+                    <p>Wind</p>
+                    <strong id="currentWind">-- km/u</strong>
+                </div>
+
+                <div class="weather-card">
+                    <span>📍</span>
+                    <p>Plaats</p>
+                    <strong id="currentCity">--</strong>
+                </div>
+
+            </div>
+
+
+            <!-- Morgen -->
+            <div class="glass-card">
+
+                <h2>Morgen</h2>
+
+                <div class="tomorrow-grid">
+
+                    <div>
+                        <span>⬆️</span>
+                        <p>Maximum</p>
+                        <strong id="tomorrowMax">-- °C</strong>
+                    </div>
+
+                    <div>
+                        <span>⬇️</span>
+                        <p>Minimum</p>
+                        <strong id="tomorrowMin">-- °C</strong>
+                    </div>
+
+                    <div>
+                        <span>🌧️</span>
+                        <p>Neerslag</p>
+                        <strong id="tomorrowRain">-- mm</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Grafiek -->
+            <div class="glass-card chart-card">
+
+                <h2>Gemiddelde temperatuur komende dagen</h2>
+
+                <div class="chart-container">
+                    <canvas id="weatherChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             KLEURMODELLEN
+             ===================================================== -->
+
+        <section id="colors" class="page">
+
+            <div class="page-heading">
+                <span class="eyebrow">INFORMATICA</span>
+                <h1>Kleurmodellen 🎨</h1>
+                <p>
+                    Op deze pagina leg ik uit hoe kleuren digitaal worden
+                    weergegeven met RGB en hexadecimale waarden.
+                </p>
+            </div>
+
+
+            <div class="glass-card">
+
+                <h2>RGB-model</h2>
+
+                <p>
+                    RGB staat voor <strong>Rood, Groen en Blauw</strong>.
+                    Een computerscherm maakt kleuren door deze drie kleuren
+                    te combineren. Iedere waarde loopt van 0 tot en met 255.
+                </p>
+
+                <div class="rgb-example">
+
+                    <div class="color-square" id="rgbPreview"></div>
+
+                    <div>
+                        <h3>Voorbeeldkleur</h3>
+
+                        <p>
+                            RGB:
+                            <strong id="rgbValue">(50, 120, 255)</strong>
+                        </p>
+
+                        <p>
+                            Hex:
+                            <strong id="hexValue">#3278FF</strong>
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RGB-invoer -->
+            <div class="glass-card">
+
+                <h2>Zelf een RGB-kleur maken</h2>
+
+                <p>
+                    Dit is ook een voorbeeld van
+                    <strong>invoer → verwerking → uitvoer</strong>.
+                </p>
+
+                <div class="rgb-input-grid">
+
+                    <label>
+                        Rood
+                        <input type="number" id="redInput" min="0" max="255" value="50">
+                    </label>
+
+                    <label>
+                        Groen
+                        <input type="number" id="greenInput" min="0" max="255" value="120">
+                    </label>
+
+                    <label>
+                        Blauw
+                        <input type="number" id="blueInput" min="0" max="255" value="255">
+                    </label>
+
+                </div>
+
+                <button class="primary-button" id="colorButton">
+                    Maak kleur
+                </button>
+
+                <div class="color-output" id="colorOutput">
+                    RGB(50, 120, 255) → #3278FF
+                </div>
+
+            </div>
+
+
+            <div class="glass-card">
+
+                <h2>Decimaal en hexadecimaal</h2>
+
+                <p>
+                    RGB gebruikt decimale getallen van 0 tot 255.
+                    Bij hexadecimale kleuren worden waarden geschreven met
+                    cijfers 0-9 en letters A-F.
+                </p>
+
+                <div class="hex-table">
+
+                    <div>
+                        <strong>Decimaal</strong>
+                        <span>255</span>
+                        <span>128</span>
+                        <span>0</span>
+                    </div>
+
+                    <div>
+                        <strong>Hex</strong>
+                        <span>FF</span>
+                        <span>80</span>
+                        <span>00</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BINair stelsel
+             ===================================================== -->
+
+        <section id="binary" class="page">
+
+            <div class="page-heading">
+                <span class="eyebrow">GETALLENSTELSEL</span>
+                <h1>Binair stelsel 🔢</h1>
+
+                <p>
+                    Computers werken met bits. Een bit kan de waarde 0 of 1
+                    hebben.
+                </p>
+            </div>
+
+
+            <div class="glass-card">
+
+                <h2>Wat is binair?</h2>
+
+                <p>
+                    Het binaire stelsel is een getallenstelsel met slechts twee
+                    cijfers: <strong>0 en 1</strong>. Iedere positie heeft een
+                    waarde die een macht van 2 is.
+                </p>
+
+                <div class="binary-values">
+
+                    <div>
+                        <span>128</span>
+                        <strong>1</strong>
+                    </div>
+
+                    <div>
+                        <span>64</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div>
+                        <span>32</span>
+                        <strong>1</strong>
+                    </div>
+
+                    <div>
+                        <span>16</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div>
+                        <span>8</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div>
+                        <span>4</span>
+                        <strong>1</strong>
+                    </div>
+
+                    <div>
+                        <span>2</span>
+                        <strong>0</strong>
+                    </div>
+
+                    <div>
+                        <span>1</span>
+                        <strong>1</strong>
+                    </div>
+
+                </div>
+
+                <p class="example-text">
+                    Bijvoorbeeld: <strong>10100101</strong> =
+                    128 + 32 + 4 + 1 = <strong>165</strong>.
+                </p>
+
+            </div>
+
+
+            <!-- Klikbare afbeelding naar Binary Bonanza -->
+            <div class="glass-card">
+
+                <h2>Binary Bonanza</h2>
+
+                <p>
+                    Via de afbeelding hieronder kun je Binary Bonanza openen.
+                    Het spel helpt om te oefenen met binaire getallen.
+                </p>
+
+                <!--
+                    De afbeelding is klikbaar doordat de SVG binnen een
+                    a-element staat. De link gaat naar Binary Bonanza.
+                -->
+                <a
+                    class="binary-game-image"
+                    href="https://games.penjee.com/binary-bonanza/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Open Binary Bonanza"
+                >
+
+                    <svg
+                        viewBox="0 0 900 300"
+                        role="img"
+                        aria-label="Klikbare afbeelding van Binary Bonanza"
+                    >
+
+                        <rect
+                            x="0"
+                            y="0"
+                            width="900"
+                            height="300"
+                            rx="30"
+                            fill="#111827"
+                        />
+
+                        <text
+                            x="450"
+                            y="100"
+                            text-anchor="middle"
+                            fill="white"
+                            font-size="60"
+                            font-family="Arial"
+                            font-weight="bold"
+                        >
+                            01010110
+                        </text>
+
+                        <text
+                            x="450"
+                            y="165"
+                            text-anchor="middle"
+                            fill="#9ca3af"
+                            font-size="28"
+                            font-family="Arial"
+                        >
+                            BINARY BONANZA
+                        </text>
+
+                        <text
+                            x="450"
+                            y="225"
+                            text-anchor="middle"
+                            fill="#60a5fa"
+                            font-size="22"
+                            font-family="Arial"
+                        >
+                            Klik hier om het spel te spelen →
+                        </text>
+
+                    </svg>
+
+                </a>
+
+            </div>
+
+
+            <!-- YouTube-video -->
+            <div class="glass-card video-card">
+
+                <h2>Video over het binaire stelsel</h2>
+
+                <div class="video-wrapper">
+
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/sXxwr66Y79Y"
+                        title="The binary number system"
+                        loading="lazy"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+                <h3>Waarom heb ik deze video gekozen?</h3>
+
+                <p>
+                    Ik heb deze video gekozen omdat hij op een duidelijke manier
+                    uitlegt wat het binaire stelsel is en waarom computers met
+                    nullen en enen werken. De video laat ook zien hoe de
+                    verschillende machten van 2 worden gebruikt.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMPRESSIE
+             ===================================================== -->
+
+        <section id="compression" class="page">
+
+            <div class="page-heading">
+                <span class="eyebrow">DIGITALE MEDIA</span>
+
+                <h1>Compressie 🗜️</h1>
+
+                <p>
+                    Compressie wordt gebruikt om bestanden kleiner te maken,
+                    bijvoorbeeld afbeeldingen, video's en andere bestanden.
+                </p>
+            </div>
+
+
+            <div class="content-grid">
+
+                <article class="glass-card">
+
+                    <span class="card-icon">🖼️</span>
+
+                    <h2>Bitmap</h2>
+
+                    <p>
+                        Een bitmapafbeelding bestaat uit veel kleine pixels.
+                        Foto's zijn meestal bitmapafbeeldingen.
+                    </p>
+
+                    <p>
+                        Wanneer je een bitmap sterk vergroot, kunnen de pixels
+                        zichtbaar worden.
+                    </p>
+
+                </article>
+
+
+                <article class="glass-card">
+
+                    <span class="card-icon">📐</span>
+
+                    <h2>Vector</h2>
+
+                    <p>
+                        Een vectorafbeelding wordt opgebouwd uit lijnen,
+                        vormen en wiskundige berekeningen.
+                    </p>
+
+                    <p>
+                        Een vectorafbeelding kan meestal veel groter worden
+                        gemaakt zonder dat de randen pixelig worden.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <div class="glass-card">
+
+                <h2>Bitmap versus vector</h2>
+
+                <div class="comparison">
+
+                    <div class="comparison-item">
+                        <strong>Bitmap</strong>
+                        <span>Pixels</span>
+                        <span>Goed voor foto's</span>
+                        <span>Kan pixelig worden</span>
+                    </div>
+
+                    <div class="comparison-item">
+                        <strong>Vector</strong>
+                        <span>Lijnen en vormen</span>
+                        <span>Goed voor logo's</span>
+                        <span>Goed schaalbaar</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- YouTube-video over bitmap en vector -->
+            <div class="glass-card video-card">
+
+                <h2>Video: Vector vs. Bitmap</h2>
+
+                <div class="video-wrapper">
+
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/fy9Pby0Gzsc"
+                        title="Vector VS Bitmap"
+                        loading="lazy"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+                <h3>Waarom heb ik deze video gekozen?</h3>
+
+                <p>
+                    Ik heb deze video gekozen omdat het verschil tussen bitmap
+                    en vector direct wordt uitgelegd. Daardoor is goed te zien
+                    waarom een foto en een logo op een andere manier kunnen
+                    worden opgeslagen. Ik heb de video bekeken om de verschillen
+                    zelf beter te begrijpen.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AI
+             ===================================================== -->
+
+        <section id="ai" class="page">
+
+            <div class="page-heading">
+                <span class="eyebrow">KUNSTMATIGE INTELLIGENTIE</span>
+
+                <h1>Artificial Intelligence 🤖</h1>
+
+                <p>
+                    AI staat voor Artificial Intelligence, oftewel
+                    kunstmatige intelligentie.
+                </p>
+            </div>
+
+
+            <!-- AI-afbeelding gemaakt met SVG -->
+            <div class="ai-visual">
+
+                <svg viewBox="0 0 1000 320" role="img"
+                     aria-label="Illustratie van kunstmatige intelligentie">
+
+                    <rect
+                        width="1000"
+                        height="320"
+                        rx="30"
+                        fill="#111827"
+                    />
+
+                    <circle cx="500" cy="150" r="85" fill="#2563eb"/>
+
+                    <circle cx="470" cy="135" r="12" fill="white"/>
+                    <circle cx="530" cy="135" r="12" fill="white"/>
+
+                    <path
+                        d="M455 175 Q500 210 545 175"
+                        fill="none"
+                        stroke="white"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                    />
+
+                    <line x1="500" y1="65" x2="500" y2="25"
+                          stroke="#60a5fa" stroke-width="5"/>
+
+                    <circle cx="500" cy="20" r="8" fill="#60a5fa"/>
+
+                    <text
+                        x="500"
+                        y="285"
+                        text-anchor="middle"
+                        fill="white"
+                        font-size="38"
+                        font-family="Arial"
+                        font-weight="bold"
+                    >
+                        ARTIFICIAL INTELLIGENCE
+                    </text>
+
+                </svg>
+
+            </div>
+
+
+            <div class="content-grid">
+
+                <!-- Waar ik AI voor gebruik -->
+                <article class="glass-card">
+
+                    <span class="card-icon">💡</span>
+
+                    <h2>Waar gebruik ik AI voor?</h2>
+
+                    <p>
+                        Ik gebruik AI vooral als hulpmiddel bij het leren en
+                        programmeren. Ik kan bijvoorbeeld om uitleg vragen
+                        wanneer ik iets in mijn code niet begrijp of ideeën
+                        gebruiken om een probleem op te lossen.
+                    </p>
+
+                    <p>
+                        Ik probeer de antwoorden niet zomaar over te nemen,
+                        maar te begrijpen wat de code doet. Daardoor leer ik
+                        van AI in plaats van alleen een antwoord te kopiëren.
+                    </p>
+
+                </article>
+
+
+                <!-- Wat ik leer -->
+                <article class="glass-card">
+
+                    <span class="card-icon">📚</span>
+
+                    <h2>Leer ik iets van AI?</h2>
+
+                    <p>
+                        Ja. Door AI vragen te stellen kan ik bijvoorbeeld
+                        leren waarom HTML, CSS en JavaScript op een bepaalde
+                        manier worden gebruikt.
+                    </p>
+
+                    <p>
+                        Ik moet de antwoorden wel controleren, want AI kan
+                        fouten maken. Daarom is AI voor mij vooral een
+                        hulpmiddel en niet een vervanging voor zelf nadenken.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <!-- Mobiele telefoon -->
+            <div class="glass-card phone-card">
+
+                <div class="phone-illustration">
+
+                    <div class="phone-frame">
+
+                        <div class="phone-screen">
+
+                            <span class="phone-ai-icon">✨</span>
+
+                            <strong>AI</strong>
+
+                            <small>Circle to Search</small>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <span class="eyebrow">MIJN TELEFOON</span>
+
+                    <h2>Samsung Galaxy A56 5G</h2>
+
+                    <p>
+                        Mijn telefoon is een Samsung Galaxy A56 5G. Samsung
+                        heeft op dit toestel verschillende slimme functies
+                        geïntegreerd onder de naam <strong>Awesome Intelligence</strong>.
+                    </p>
+
+                    <p>
+                        Een voorbeeld is <strong>Circle to Search</strong>.
+                        Daarmee kan ik iets op mijn scherm omcirkelen om er
+                        informatie over te zoeken. Ook heeft de telefoon
+                        functies zoals Object Eraser voor foto's.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- AI video -->
+            <div class="glass-card video-card">
+
+                <h2>Korte video over AI</h2>
+
+                <div class="video-wrapper">
+
+                    <iframe
+                        src="https://www.youtube-nocookie.com/embed/ZjZV9rZSKmE"
+                        title="What is AI? Artificial Intelligence Explained for Beginners"
+                        loading="lazy"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+                <h3>Waarom heb ik deze video gekozen?</h3>
+
+                <p>
+                    Ik heb deze video gekozen omdat hij speciaal is gemaakt voor
+                    beginners. In korte tijd wordt uitgelegd wat AI is en welke
+                    voorbeelden we in het dagelijks leven tegenkomen. Dat past
+                    goed bij deze schoolopdracht omdat de uitleg begrijpelijk is.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PENALTY GAME
+             ===================================================== -->
+
+        <section id="game" class="page">
+
+            <div class="page-heading">
+
+                <span class="eyebrow">MINIGAME</span>
+
+                <h1>Penalty Game ⚽</h1>
+
+                <p>
+                    Kies een plek in het doel en probeer de keeper te verslaan.
+                </p>
+
+            </div>
+
+
+            <div class="game-stats">
+
+                <div>
+                    <span>Goals</span>
+                    <strong id="score">0</strong>
+                </div>
+
+                <div>
+                    <span>Streak</span>
+                    <strong id="streak">0</strong>
+                </div>
+
+                <div>
+                    <span>Keeper</span>
+                    <strong id="keeperStatus">Klaar</strong>
+                </div>
+
+            </div>
+
+
+            <div class="glass-card penalty-card">
+
+                <div class="goal">
+
+                    <div class="goal-zone" data-zone="top-left">↖</div>
+                    <div class="goal-zone" data-zone="top-center">↑</div>
+                    <div class="goal-zone" data-zone="top-right">↗</div>
+
+                    <div class="goal-zone" data-zone="middle-left">←</div>
+                    <div class="goal-zone" data-zone="middle-center">●</div>
+                    <div class="goal-zone" data-zone="middle-right">→</div>
+
+                    <div class="goal-zone" data-zone="bottom-left">↙</div>
+                    <div class="goal-zone" data-zone="bottom-center">↓</div>
+                    <div class="goal-zone" data-zone="bottom-right">↘</div>
+
+                    <div id="keeper">🧤</div>
+
+                </div>
+
+                <p id="gameMessage" class="game-message">
+                    Kies een plek om te schieten!
+                </p>
+
+                <button class="primary-button" id="resetGame">
+                    Opnieuw spelen
+                </button>
+
+            </div>
+
+        </section>
+
     </main>
 
-    <script>
-        let currentCity = "Leiden";
-        let currentBgStyle = "clean";
-        let weeklyChartInstance = null;
-        let cachedDailyData = null;
 
-        const cityLandmarks = {
-            'leiden': 'https://images.unsplash.com/photo-1584003564911-a7a321c84e1c?auto=format&fit=crop&w=1920&q=80',
-            'amsterdam': 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=1920&q=80',
-            'rotterdam': 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?auto=format&fit=crop&w=1920&q=80',
-            'utrecht': 'https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=1920&q=80'
-        };
+    <!-- =========================================================
+         INSTELLINGEN MODAL
+         ========================================================= -->
 
-        function updateCityBackground(cityName) {
-            const cleanCity = cityName.toLowerCase().trim();
-            let imgUrl = cityLandmarks[cleanCity] || 'https://images.unsplash.com/photo-1477959858617-67f30ac4ce78?auto=format&fit=crop&w=1920&q=80';
-            document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('${imgUrl}')`;
-        }
+    <div class="modal-overlay" id="settingsModal">
 
-        function clearCityBackground() {
-            document.body.style.backgroundImage = '';
-            changeBg(currentBgStyle);
-        }
+        <div class="settings-modal">
 
-        function toggleSettingsModal() {
-            document.getElementById('settingsOverlay').classList.toggle('active');
-        }
+            <button class="close-button" id="closeSettings">×</button>
 
-        function closeSettingsOuter(e) {
-            if (e.target.id === 'settingsOverlay') toggleSettingsModal();
-        }
+            <span class="eyebrow">INSTELLINGEN</span>
 
-        function showPage(pageId, event) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            
-            document.getElementById(pageId).classList.add('active');
-            if (event && event.currentTarget) event.currentTarget.classList.add('active');
+            <h2>Website aanpassen</h2>
 
-            if(pageId === 'weer') {
-                updateCityBackground(currentCity);
-                fetchCityWeather(currentCity);
-            } else {
-                clearCityBackground();
-            }
-        }
 
-        function switchWeatherTab(view) {
-            const todayView = document.getElementById('weather-view-today');
-            const weeklyView = document.getElementById('weather-view-weekly');
-            const btnToday = document.getElementById('btn-view-today');
-            const btnWeekly = document.getElementById('btn-view-weekly');
+            <!-- Thema -->
+            <label for="themeSelect">Thema</label>
 
-            if (view === 'today') {
-                todayView.style.display = 'block';
-                weeklyView.style.display = 'none';
-                btnToday.classList.add('active');
-                btnWeekly.classList.remove('active');
-            } else {
-                todayView.style.display = 'none';
-                weeklyView.style.display = 'block';
-                btnToday.classList.remove('active');
-                btnWeekly.classList.add('active');
+            <select id="themeSelect">
 
-                if (cachedDailyData) renderWeeklyChart(cachedDailyData);
-            }
-        }
+                <option value="auto">Automatisch</option>
+                <option value="light">Licht</option>
+                <option value="dark">Donker</option>
 
-        function changeTheme(theme) {
-            if (theme === 'dark') document.body.classList.add('dark-mode');
-            else if (theme === 'light') document.body.classList.remove('dark-mode');
-            else if (theme === 'auto') {
-                const hour = new Date().getHours();
-                if (hour >= 19 || hour < 7) document.body.classList.add('dark-mode');
-                else document.body.classList.remove('dark-mode');
-            }
-        }
+            </select>
 
-        function setAccent(primary, hover) {
-            document.documentElement.style.setProperty('--primary-color', primary);
-            document.documentElement.style.setProperty('--primary-hover', hover);
-        }
 
-        function changeBg(type) {
-            currentBgStyle = type;
-            document.body.classList.remove('bg-pattern', 'bg-animated');
-            if (!document.getElementById('weer').classList.contains('active')) {
-                if (type === 'pattern') document.body.classList.add('bg-pattern');
-                if (type === 'animated') document.body.classList.add('bg-animated');
-            }
-        }
+            <!-- Achtergrond -->
+            <label for="backgroundSelect">Achtergrond</label>
 
-        function updateUsername(name) {
-            document.getElementById('welcome-title').innerText = name.trim() !== "" ? `👋 Welkom, ${name}!` : "👋 Welkom!";
-        }
+            <select id="backgroundSelect">
 
-        function saveCity() {
-            const city = document.getElementById('city-input').value;
-            if(city.trim() !== "") {
-                currentCity = city;
-                if (document.getElementById('weer').classList.contains('active')) {
-                    updateCityBackground(currentCity);
-                    fetchCityWeather(currentCity);
-                }
-                alert(`Stad gewijzigd naar: ${city}`);
-            }
-        }
+                <option value="clean">Rustig</option>
+                <option value="pattern">Patroon</option>
+                <option value="animated">Geanimeerd</option>
 
-        async function fetchCityWeather(cityName) {
-            document.getElementById('weather-city-title').innerText = `🌤️ Weer in ${cityName}`;
-            const statusText = document.getElementById('weather-status');
-            const detailsDiv = document.getElementById('weather-details');
+            </select>
 
-            try {
-                const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=nl`);
-                const geoData = await geoRes.json();
 
-                if (!geoData.results || geoData.results.length === 0) {
-                    statusText.innerText = "Stad niet gevonden.";
-                    return;
-                }
+            <!-- Naam -->
+            <label for="nameInput">Naam</label>
 
-                const { latitude, longitude } = geoData.results[0];
-                const weatherRes = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Europe%2FAmsterdam`);
-                const weatherData = await weatherRes.json();
+            <input
+                type="text"
+                id="nameInput"
+                placeholder="Jouw naam"
+            >
 
-                document.getElementById('temp-now').innerText = weatherData.current.temperature_2m;
-                document.getElementById('rain-now').innerText = weatherData.current.rain;
-                document.getElementById('wind-now').innerText = weatherData.current.wind_speed_10m;
 
-                document.getElementById('temp-max-tom').innerText = weatherData.daily.temperature_2m_max[1];
-                document.getElementById('temp-min-tom').innerText = weatherData.daily.temperature_2m_min[1];
-                document.getElementById('rain-tom').innerText = weatherData.daily.rain_sum[1];
+            <!-- Stad -->
+            <label for="settingsCityInput">Standaard plaats voor weer</label>
 
-                const maxTemps = weatherData.daily.temperature_2m_max;
-                const minTemps = weatherData.daily.temperature_2m_min;
-                const rainSums = weatherData.daily.rain_sum;
+            <input
+                type="text"
+                id="settingsCityInput"
+                placeholder="Bijvoorbeeld Amsterdam"
+            >
 
-                const avgMax = (maxTemps.reduce((a, b) => a + b, 0) / maxTemps.length).toFixed(1);
-                const avgMin = (minTemps.reduce((a, b) => a + b, 0) / minTemps.length).toFixed(1);
-                const avgTemp = ((parseFloat(avgMax) + parseFloat(avgMin)) / 2).toFixed(1);
-                const avgRain = (rainSums.reduce((a, b) => a + b, 0) / rainSums.length).toFixed(1);
 
-                document.getElementById('temp-avg-week').innerText = avgTemp;
-                document.getElementById('temp-max-avg-week').innerText = avgMax;
-                document.getElementById('rain-avg-week').innerText = avgRain;
+            <!-- Accentkleur -->
+            <label>Accentkleur</label>
 
-                cachedDailyData = weatherData.daily;
-                statusText.style.display = "none";
-                detailsDiv.style.display = "block";
-            } catch (err) {
-                statusText.innerText = "Kon weerbericht niet ophalen.";
-            }
-        }
+            <div class="accent-options">
 
-        function renderWeeklyChart(dailyData) {
-            const ctx = document.getElementById('weeklyChart').getContext('2d');
-            const labels = dailyData.time.map(d => new Date(d).toLocaleDateString('nl-NL', { weekday: 'short', day: 'numeric' }));
-            const isDark = document.body.classList.contains('dark-mode');
-            const textColor = isDark ? '#f8fafc' : '#0f172a';
+                <button class="accent accent-blue" data-accent="#3b82f6"></button>
+                <button class="accent accent-purple" data-accent="#8b5cf6"></button>
+                <button class="accent accent-green" data-accent="#10b981"></button>
+                <button class="accent accent-orange" data-accent="#f97316"></button>
 
-            if (weeklyChartInstance) weeklyChartInstance.destroy();
+            </div>
 
-            weeklyChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Max Temp (°C)', data: dailyData.temperature_2m_max, borderColor: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.2)', tension: 0.3, fill: true },
-                        { label: 'Min Temp (°C)', data: dailyData.temperature_2m_min, borderColor: '#0284c7', backgroundColor: 'rgba(2, 132, 199, 0.2)', tension: 0.3, fill: true }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: textColor } } },
-                    scales: {
-                        x: { ticks: { color: textColor }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                        y: { ticks: { color: textColor }, grid: { color: 'rgba(255,255,255,0.1)' } }
-                    }
-                }
-            });
-        }
 
-        /* -------------------------------------------------------------
-           PRO PENALTY GAME ENGINE (PRECISIE RICHTEN & ECHTE KEEPER AI)
-        ------------------------------------------------------------- */
-        const arena = document.getElementById('penalty-arena');
-        const ball = document.getElementById('soccer-ball');
-        const keeper = document.getElementById('goalkeeper-wrapper');
-        const goalFrame = document.getElementById('goal-frame');
-        const feedback = document.getElementById('game-feedback');
-        const aimTarget = document.getElementById('aim-target');
+            <!-- Geluid -->
+            <label class="checkbox-label">
 
-        let totalGoals = 0;
-        let streak = 0;
-        let isShooting = false;
-        let isDragging = false;
-        let startX = 0, startY = 0;
+                <input type="checkbox" id="soundToggle" checked>
 
-        // Snelle optie: Klik/tap rechtstreeks in een hoek van de goal
-        function shootToZone(zoneName) {
-            if (isShooting) return;
-            
-            const goalRect = goalFrame.getBoundingClientRect();
-            const arenaRect = arena.getBoundingClientRect();
+                Geluid aan
 
-            let targetX = arenaRect.width / 2;
-            let targetY = goalRect.top - arenaRect.top + 40;
+            </label>
 
-            if (zoneName === 'top-left') { targetX = (goalRect.left - arenaRect.left) + 30; targetY = goalRect.top - arenaRect.top + 25; }
-            if (zoneName === 'top-mid') { targetX = arenaRect.width / 2; targetY = goalRect.top - arenaRect.top + 20; }
-            if (zoneName === 'top-right') { targetX = (goalRect.right - arenaRect.left) - 30; targetY = goalRect.top - arenaRect.top + 25; }
-            if (zoneName === 'low-left') { targetX = (goalRect.left - arenaRect.left) + 35; targetY = goalRect.bottom - arenaRect.top - 20; }
-            if (zoneName === 'low-mid') { targetX = arenaRect.width / 2; targetY = goalRect.bottom - arenaRect.top - 15; }
-            if (zoneName === 'low-right') { targetX = (goalRect.right - arenaRect.left) - 35; targetY = goalRect.bottom - arenaRect.top - 20; }
 
-            executeShot(targetX, targetY);
-        }
+            <button class="primary-button full-button" id="saveSettings">
+                Instellingen opslaan
+            </button>
 
-        // Swipe & Drag Besturing voor de Bal
-        ball.addEventListener('mousedown', startDrag);
-        ball.addEventListener('touchstart', startDrag, { passive: false });
+        </div>
 
-        window.addEventListener('mousemove', dragMove);
-        window.addEventListener('touchmove', dragMove, { passive: false });
+    </div>
 
-        window.addEventListener('mouseup', endDrag);
-        window.addEventListener('touchend', endDrag);
 
-        function getPos(e) {
-            if (e.touches && e.touches.length > 0) {
-                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-            }
-            return { x: e.clientX, y: e.clientY };
-        }
+    <!-- JavaScript-bestand -->
+    <script src="script.js"></script>
 
-        function startDrag(e) {
-            if (isShooting) return;
-            e.preventDefault();
-            isDragging = true;
-            const pos = getPos(e);
-            startX = pos.x;
-            startY = pos.y;
-            aimTarget.style.display = 'block';
-        }
-
-        function dragMove(e) {
-            if (!isDragging || isShooting) return;
-            e.preventDefault();
-            const pos = getPos(e);
-            const dx = pos.x - startX;
-            const dy = pos.y - startY;
-
-            const arenaRect = arena.getBoundingClientRect();
-            const targetX = (arenaRect.width / 2) + (dx * 1.3);
-            const targetY = arenaRect.height - 70 + (dy * 1.3);
-
-            // Vizier bijwerken
-            aimTarget.style.left = `${targetX}px`;
-            aimTarget.style.top = `${targetY}px`;
-
-            ball.style.transform = `translate(calc(-50% + ${dx * 0.2}px), ${dy * 0.2}px) scale(0.95)`;
-        }
-
-        function endDrag(e) {
-            if (!isDragging || isShooting) return;
-            isDragging = false;
-            aimTarget.style.display = 'none';
-
-            const pos = e.changedTouches ? { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY } : { x: e.clientX, y: e.clientY };
-            const dx = pos.x - startX;
-            const dy = pos.y - startY;
-
-            if (dy < -20) {
-                const arenaRect = arena.getBoundingClientRect();
-                const targetX = (arenaRect.width / 2) + (dx * 1.5);
-                const targetY = arenaRect.height - 70 + (dy * 1.4);
-                executeShot(targetX, targetY);
-            } else {
-                resetBall();
-            }
-        }
-
-        function executeShot(targetX, targetY) {
-            isShooting = true;
-            const arenaRect = arena.getBoundingClientRect();
-            const goalRect = goalFrame.getBoundingClientRect();
-
-            // Vluchtanimatie bal
-            ball.style.transition = 'all 0.45s cubic-bezier(0.1, 0.6, 0.3, 1)';
-            ball.style.left = `${targetX}px`;
-            ball.style.bottom = `${arenaRect.height - targetY}px`;
-            ball.style.transform = 'translate(-50%, 50%) scale(0.5) rotate(360deg)';
-
-            // AI Keeper Duik-berekening
-            const diff = document.getElementById('difficulty-select').value;
-            let keeperSkill = diff === 'easy' ? 0.35 : (diff === 'medium' ? 0.65 : 0.88);
-
-            let keeperX = arenaRect.width / 2;
-            let keeperY = goalRect.bottom - arenaRect.top - 50;
-
-            // Keeper kiest richting
-            if (Math.random() < keeperSkill) {
-                // Keeper voorspelt balrichting
-                keeperX = Math.max(goalRect.left - arenaRect.left + 40, Math.min(goalRect.right - arenaRect.left - 40, targetX));
-                keeperY = Math.max(goalRect.top - arenaRect.top + 30, Math.min(goalRect.bottom - arenaRect.top - 20, targetY));
-            } else {
-                // Keeper gokt een willekeurige hoek
-                keeperX = (goalRect.left - arenaRect.left) + Math.random() * goalRect.width;
-            }
-
-            // Keeper animatie (duiken)
-            const diveAngle = (keeperX - (arenaRect.width / 2)) * 0.4;
-            keeper.style.left = `${keeperX}px`;
-            keeper.style.bottom = `${arenaRect.height - keeperY - 80}px`;
-            keeper.style.transform = `translateX(-50%) rotate(${diveAngle}deg)`;
-
-            // Resultaat bepalen
-            setTimeout(() => {
-                const goalLeft = goalRect.left - arenaRect.left;
-                const goalRight = goalRect.right - arenaRect.left;
-                const goalTop = goalRect.top - arenaRect.top;
-                const goalBottom = goalRect.bottom - arenaRect.top;
-
-                const isInsideGoal = targetX >= goalLeft && targetX <= goalRight && targetY >= goalTop && targetY <= goalBottom;
-                const distToKeeper = Math.hypot(targetX - keeperX, targetY - keeperY);
-
-                if (!isInsideGoal) {
-                    feedback.innerText = "❌ Naast of over geschoten!";
-                    feedback.style.color = "#ef4444";
-                    streak = 0;
-                } else if (distToKeeper < 55) {
-                    feedback.innerText = "🧤 Prachtige redding van de keeper!";
-                    feedback.style.color = "#f97316";
-                    streak = 0;
-                } else {
-                    totalGoals++;
-                    streak++;
-                    feedback.innerText = "⚽ GOAAAAL! IN DE HOEK!";
-                    feedback.style.color = "#10b981";
-                    playSound();
-                }
-
-                document.getElementById('penalty-goals').innerText = totalGoals;
-                document.getElementById('penalty-streak').innerText = streak;
-
-                setTimeout(resetBall, 1200);
-            }, 450);
-        }
-
-        function resetBall() {
-            ball.style.transition = 'none';
-            ball.style.left = '50%';
-            ball.style.bottom = '25px';
-            ball.style.transform = 'translate(-50%, 0) scale(1) rotate(0deg)';
-
-            keeper.style.transition = 'all 0.3s ease';
-            keeper.style.left = '50%';
-            keeper.style.bottom = '0px';
-            keeper.style.transform = 'translateX(-50%) rotate(0deg)';
-
-            isShooting = false;
-        }
-
-        function resetPenaltyGame() {
-            totalGoals = 0;
-            streak = 0;
-            document.getElementById('penalty-goals').innerText = '0';
-            document.getElementById('penalty-streak').innerText = '0';
-            document.getElementById('game-feedback').innerText = 'Kies je hoek en schiet!';
-            resetBall();
-        }
-
-        function playSound() {
-            if (document.getElementById('sound-toggle').value === 'on') {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                osc.connect(ctx.destination);
-                osc.frequency.value = 580;
-                osc.start();
-                osc.stop(ctx.currentTime + 0.15);
-            }
-        }
-    </script>
 </body>
 </html>
