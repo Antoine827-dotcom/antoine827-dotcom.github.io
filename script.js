@@ -1,813 +1,757 @@
-/* ============================================================
-   PAGINA-NAVIGATIE
-   Dit gedeelte zorgt ervoor dat de knoppen in het menu
-   de juiste pagina zichtbaar maken.
-   ============================================================ */
+// ========================================
+// NAVIGATIE TUSSEN DE PAGINA'S
+// ========================================
 
-const navLinks = document.querySelectorAll(".nav-link");
-const pages = document.querySelectorAll(".page");
-
-
-/* Deze functie laat één pagina zien en verbergt de andere pagina's. */
 function showPage(pageId) {
-
-    pages.forEach(page => {
+    document.querySelectorAll(".page").forEach((page) => {
         page.classList.remove("active-page");
+    });
+
+    document.querySelectorAll(".nav-link").forEach((link) => {
+        link.classList.remove("active");
     });
 
     const selectedPage = document.getElementById(pageId);
 
-    if (selectedPage) {
-        selectedPage.classList.add("active-page");
+    if (!selectedPage) {
+        return;
     }
 
+    selectedPage.classList.add("active-page");
 
-    /* De actieve knop in het menu krijgt een andere kleur. */
-    navLinks.forEach(link => {
+    const selectedLink = document.querySelector(
+        `.nav-link[data-page="${pageId}"]`
+    );
 
-        link.classList.remove("active");
+    if (selectedLink) {
+        selectedLink.classList.add("active");
+    }
 
-        if (link.dataset.page === pageId) {
-            link.classList.add("active");
-        }
-
-    });
-
-
-    /* Op mobiel gaat de gebruiker terug naar de bovenkant. */
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
 }
 
-
-/* Aan iedere navigatielink wordt een klik-event gekoppeld. */
-navLinks.forEach(link => {
-
-    link.addEventListener("click", event => {
-
+document.querySelectorAll(".nav-link").forEach((link) => {
+    link.addEventListener("click", (event) => {
         event.preventDefault();
-
         showPage(link.dataset.page);
+    });
+});
 
+
+// ========================================
+// SCROLLANIMATIE EN VOORTGANG
+// ========================================
+
+let scrollScheduled = false;
+
+function updateScrollBackground() {
+    const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+    const progress = maxScroll > 0
+        ? window.scrollY / maxScroll
+        : 0;
+
+    const clampedProgress = Math.max(0, Math.min(1, progress));
+
+    document.documentElement.style.setProperty(
+        "--scroll-progress",
+        clampedProgress
+    );
+
+    // De achtergrond beweegt mee met de scrollpositie.
+    // De waarden worden als pixels berekend voor brede browserondersteuning.
+    const x = Math.sin(clampedProgress * Math.PI * 2) * 70;
+    const y = clampedProgress * 150;
+    const rotation = clampedProgress * 12;
+
+    document.body.style.setProperty("--scroll-x", `${x}px`);
+    document.body.style.setProperty("--scroll-y", `${y}px`);
+    document.body.style.setProperty("--scroll-rotation", `${rotation}deg`);
+
+    document.body.style.setProperty(
+        "--background-transform",
+        `translate3d(${x}px, ${y}px, 0) rotate(${rotation}deg)`
+    );
+
+    scrollScheduled = false;
+}
+
+window.addEventListener("scroll", () => {
+    if (!scrollScheduled) {
+        window.requestAnimationFrame(updateScrollBackground);
+        scrollScheduled = true;
+    }
+}, { passive: true });
+
+window.addEventListener("resize", updateScrollBackground);
+
+updateScrollBackground();
+
+
+// ========================================
+// ANIMATIE VOOR DE ONDERWERPKAARTEN
+// ========================================
+
+const revealElements = document.querySelectorAll(".reveal");
+
+if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            } else {
+                // Wanneer je weer omhoog scrolt, kan de animatie opnieuw spelen.
+                entry.target.classList.remove("visible");
+            }
+        });
+    }, {
+        threshold: 0.15
     });
 
-});
-
-
-/* ============================================================
-   INSTELLINGEN
-   ============================================================ */
-
-const settingsModal = document.getElementById("settingsModal");
-
-const openSettings = document.getElementById("openSettings");
-const closeSettings = document.getElementById("closeSettings");
-const saveSettings = document.getElementById("saveSettings");
-
-
-/* Open de instellingen */
-openSettings.addEventListener("click", () => {
-    settingsModal.classList.add("open");
-});
-
-
-/* Sluit de instellingen */
-closeSettings.addEventListener("click", () => {
-    settingsModal.classList.remove("open");
-});
-
-
-/* Klik buiten het venster om het venster te sluiten. */
-settingsModal.addEventListener("click", event => {
-
-    if (event.target === settingsModal) {
-        settingsModal.classList.remove("open");
-    }
-
-});
-
-
-/* ============================================================
-   THEMA
-   ============================================================ */
-
-const themeSelect = document.getElementById("themeSelect");
-
-
-function applyTheme(theme) {
-
-    document.body.classList.remove("dark");
-
-    if (theme === "dark") {
-
-        document.body.classList.add("dark");
-
-    } else if (theme === "auto") {
-
-        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-            document.body.classList.add("dark");
-        }
-
-    }
-
-}
-
-
-/* Wanneer de gebruiker een thema kiest, wordt dit direct toegepast. */
-themeSelect.addEventListener("change", () => {
-    applyTheme(themeSelect.value);
-});
-
-
-/* ============================================================
-   ACHTERGROND
-   ============================================================ */
-
-const backgroundSelect = document.getElementById("backgroundSelect");
-
-
-function applyBackground(background) {
-
-    document.body.classList.remove(
-        "background-pattern",
-        "background-animated"
-    );
-
-    if (background === "pattern") {
-        document.body.classList.add("background-pattern");
-    }
-
-    if (background === "animated") {
-        document.body.classList.add("background-animated");
-    }
-
-}
-
-
-backgroundSelect.addEventListener("change", () => {
-    applyBackground(backgroundSelect.value);
-});
-
-
-/* ============================================================
-   ACCENTKLEUR
-   ============================================================ */
-
-const accentButtons = document.querySelectorAll(".accent");
-
-
-accentButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        const accent = button.dataset.accent;
-
-        document.documentElement.style.setProperty(
-            "--accent",
-            accent
-        );
-
+    revealElements.forEach((element) => {
+        revealObserver.observe(element);
     });
-
-});
-
-
-/* ============================================================
-   INSTELLINGEN OPSLAAN
-   ============================================================ */
-
-saveSettings.addEventListener("click", () => {
-
-    const name =
-        document.getElementById("nameInput").value.trim();
-
-    const city =
-        document.getElementById("settingsCityInput").value.trim();
-
-
-    if (name !== "") {
-
-        document.getElementById("displayName").textContent = name;
-
-        localStorage.setItem("websiteName", name);
-
-    }
-
-
-    if (city !== "") {
-
-        document.getElementById("cityInput").value = city;
-
-        localStorage.setItem("weatherCity", city);
-
-        loadWeather(city);
-
-    }
-
-
-    localStorage.setItem(
-        "websiteTheme",
-        themeSelect.value
-    );
-
-
-    localStorage.setItem(
-        "websiteBackground",
-        backgroundSelect.value
-    );
-
-
-    settingsModal.classList.remove("open");
-
-});
-
-
-/* ============================================================
-   INSTELLINGEN LADEN
-   ============================================================ */
-
-function loadSettings() {
-
-    const savedName =
-        localStorage.getItem("websiteName");
-
-    const savedCity =
-        localStorage.getItem("weatherCity");
-
-    const savedTheme =
-        localStorage.getItem("websiteTheme");
-
-    const savedBackground =
-        localStorage.getItem("websiteBackground");
-
-
-    if (savedName) {
-
-        document.getElementById("displayName").textContent =
-            savedName;
-
-        document.getElementById("nameInput").value =
-            savedName;
-
-    }
-
-
-    if (savedCity) {
-
-        document.getElementById("cityInput").value =
-            savedCity;
-
-        document.getElementById("settingsCityInput").value =
-            savedCity;
-
-    }
-
-
-    if (savedTheme) {
-
-        themeSelect.value = savedTheme;
-
-        applyTheme(savedTheme);
-
-    }
-
-
-    if (savedBackground) {
-
-        backgroundSelect.value = savedBackground;
-
-        applyBackground(savedBackground);
-
-    }
-
+} else {
+    revealElements.forEach((element) => {
+        element.classList.add("visible");
+    });
 }
 
 
-loadSettings();
+// ========================================
+// RGB-KLEURCALCULATOR
+// ========================================
+
+const redInput = document.getElementById("redInput");
+const greenInput = document.getElementById("greenInput");
+const blueInput = document.getElementById("blueInput");
+
+const rgbPreview = document.getElementById("rgbPreview");
+const rgbValue = document.getElementById("rgbValue");
+const hexValue = document.getElementById("hexValue");
+
+const customColorPreview = document.getElementById("customColorPreview");
+const customRgbValue = document.getElementById("customRgbValue");
+const customHexValue = document.getElementById("customHexValue");
+
+function clampColor(value) {
+    const number = Number(value);
+
+    if (!Number.isFinite(number)) {
+        return 0;
+    }
+
+    return Math.max(0, Math.min(255, Math.round(number)));
+}
+
+function rgbToHex(red, green, blue) {
+    return "#" + [red, green, blue]
+        .map((value) => value.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+}
+
+function updateColor() {
+    if (!redInput || !greenInput || !blueInput) {
+        return;
+    }
+
+    const red = clampColor(redInput.value);
+    const green = clampColor(greenInput.value);
+    const blue = clampColor(blueInput.value);
+
+    const rgb = `rgb(${red}, ${green}, ${blue})`;
+    const hex = rgbToHex(red, green, blue);
+
+    if (rgbPreview) {
+        rgbPreview.style.backgroundColor = rgb;
+    }
+
+    if (rgbValue) {
+        rgbValue.textContent = `(${red}, ${green}, ${blue})`;
+    }
+
+    if (hexValue) {
+        hexValue.textContent = hex;
+    }
+
+    if (customColorPreview) {
+        customColorPreview.style.backgroundColor = rgb;
+    }
+
+    if (customRgbValue) {
+        customRgbValue.textContent = `(${red}, ${green}, ${blue})`;
+    }
+
+    if (customHexValue) {
+        customHexValue.textContent = hex;
+    }
+}
+
+[redInput, greenInput, blueInput].forEach((input) => {
+    if (input) {
+        input.addEventListener("input", updateColor);
+
+        input.addEventListener("change", () => {
+            input.value = clampColor(input.value);
+            updateColor();
+        });
+    }
+});
+
+updateColor();
 
 
-/* ============================================================
-   WEER
-   Open-Meteo wordt gebruikt voor de weergegevens.
-   Eerst zoeken we de coördinaten van de plaats.
-   Daarna halen we de actuele en dagelijkse gegevens op.
-   ============================================================ */
+// ========================================
+// WEERBERICHT
+// Gebruikt de gratis Open-Meteo API.
+// ========================================
 
-const weatherButton =
-    document.getElementById("weatherButton");
-
-const cityInput =
-    document.getElementById("cityInput");
-
-const weatherStatus =
-    document.getElementById("weatherStatus");
+const cityInput = document.getElementById("cityInput");
+const weatherButton = document.getElementById("weatherButton");
+const weatherStatus = document.getElementById("weatherStatus");
 
 let weatherChart = null;
 
-
-/* Plaats zoeken en daarna het weer ophalen. */
-async function loadWeather(city) {
-
-    if (!city) {
-
-        weatherStatus.textContent =
-            "Vul eerst een plaats in.";
-
+function setWeatherStatus(message, type = "") {
+    if (!weatherStatus) {
         return;
-
     }
 
+    weatherStatus.textContent = message;
+    weatherStatus.classList.remove("error", "success");
 
-    weatherStatus.textContent =
-        "Weergegevens worden geladen...";
-
-
-    try {
-
-        /* INVOER:
-           De gebruiker geeft een plaatsnaam op.
-
-           VERWERKING:
-           De geocoding API zoekt de geografische coördinaten. */
-
-        const geoResponse =
-            await fetch(
-                `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=nl&format=json`
-            );
-
-
-        const geoData =
-            await geoResponse.json();
-
-
-        if (!geoData.results || geoData.results.length === 0) {
-
-            weatherStatus.textContent =
-                "Ik kon deze plaats niet vinden.";
-
-            return;
-
-        }
-
-
-        const location =
-            geoData.results[0];
-
-
-        const latitude =
-            location.latitude;
-
-        const longitude =
-            location.longitude;
-
-
-        /* Met de gevonden coördinaten halen we het weer op. */
-
-        const weatherResponse =
-            await fetch(
-                `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,rain,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=auto&forecast_days=7`
-            );
-
-
-        const weather =
-            await weatherResponse.json();
-
-
-        /* UITVOER:
-           De gegevens worden in de HTML-kaarten geplaatst. */
-
-        document.getElementById("currentTemp").textContent =
-            `${weather.current.temperature_2m} °C`;
-
-        document.getElementById("currentRain").textContent =
-            `${weather.current.rain} mm`;
-
-        document.getElementById("currentWind").textContent =
-            `${weather.current.wind_speed_10m} km/u`;
-
-        document.getElementById("currentCity").textContent =
-            location.name;
-
-
-        document.getElementById("tomorrowMax").textContent =
-            `${weather.daily.temperature_2m_max[1]} °C`;
-
-        document.getElementById("tomorrowMin").textContent =
-            `${weather.daily.temperature_2m_min[1]} °C`;
-
-        document.getElementById("tomorrowRain").textContent =
-            `${weather.daily.rain_sum[1]} mm`;
-
-
-        weatherStatus.textContent =
-            `Weer geladen voor ${location.name}.`;
-
-
-        drawWeatherChart(weather);
-
-    } catch (error) {
-
-        console.error(error);
-
-        weatherStatus.textContent =
-            "Er ging iets mis bij het ophalen van het weer.";
-
+    if (type) {
+        weatherStatus.classList.add(type);
     }
-
 }
 
+async function getCoordinates(city) {
+    const url = new URL("https://geocoding-api.open-meteo.com/v1/search");
 
-weatherButton.addEventListener("click", () => {
+    url.search = new URLSearchParams({
+        name: city,
+        count: "1",
+        language: "nl",
+        format: "json"
+    }).toString();
 
-    loadWeather(cityInput.value.trim());
+    const response = await fetch(url);
 
-});
-
-
-cityInput.addEventListener("keydown", event => {
-
-    if (event.key === "Enter") {
-        loadWeather(cityInput.value.trim());
+    if (!response.ok) {
+        throw new Error("De plaats kon niet worden opgezocht.");
     }
 
-});
+    const data = await response.json();
 
+    if (!data.results || data.results.length === 0) {
+        throw new Error("Geen plaats gevonden. Controleer de spelling.");
+    }
 
-/* ============================================================
-   WEERGRAFIEK
-   ============================================================ */
+    return data.results[0];
+}
 
-function drawWeatherChart(weather) {
+async function getForecast(latitude, longitude) {
+    const url = new URL("https://api.open-meteo.com/v1/forecast");
 
-    const canvas =
-        document.getElementById("weatherChart");
+    url.search = new URLSearchParams({
+        latitude: String(latitude),
+        longitude: String(longitude),
+        current: "temperature_2m,precipitation,wind_speed_10m",
+        daily: "temperature_2m_max,temperature_2m_min,precipitation_sum",
+        forecast_days: "7",
+        timezone: "auto"
+    }).toString();
 
-    const context =
-        canvas.getContext("2d");
+    const response = await fetch(url);
 
+    if (!response.ok) {
+        throw new Error("De weersgegevens konden niet worden opgehaald.");
+    }
+
+    return response.json();
+}
+
+function updateWeatherChart(data) {
+    const canvas = document.getElementById("weatherChart");
+
+    if (!canvas || typeof Chart === "undefined") {
+        return;
+    }
+
+    const labels = data.daily.time.slice(0, 7).map((date) => {
+        return new Date(`${date}T12:00:00`).toLocaleDateString("nl-NL", {
+            weekday: "short",
+            day: "numeric"
+        });
+    });
+
+    const averages = data.daily.temperature_2m_max
+        .slice(0, 7)
+        .map((maxTemp, index) => {
+            const minTemp = data.daily.temperature_2m_min[index];
+            return Number(((maxTemp + minTemp) / 2).toFixed(1));
+        });
 
     if (weatherChart) {
         weatherChart.destroy();
     }
 
+    const isLightTheme = document.body.classList.contains("light-theme");
+    const textColor = isLightTheme ? "#475569" : "#cbd5e1";
+    const gridColor = isLightTheme
+        ? "rgba(71, 85, 105, 0.15)"
+        : "rgba(203, 213, 225, 0.13)";
 
-    const labels =
-        weather.daily.time.map(date => {
-
-            const parts = date.split("-");
-
-            return `${parts[2]}-${parts[1]}`;
-
-        });
-
-
-    const averageTemperatures =
-        weather.daily.time.map((_, index) => {
-
-            const max =
-                weather.daily.temperature_2m_max[index];
-
-            const min =
-                weather.daily.temperature_2m_min[index];
-
-            return Math.round(
-                ((max + min) / 2) * 10
-            ) / 10;
-
-        });
-
-
-    weatherChart =
-        new Chart(context, {
-
-            type: "line",
-
-            data: {
-
-                labels: labels,
-
-                datasets: [{
-
-                    label: "Gemiddelde temperatuur °C",
-
-                    data: averageTemperatures,
-
-                    tension: 0.35,
-
-                    borderWidth: 3,
-
-                    pointRadius: 5
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true,
-
-                maintainAspectRatio: false,
-
-                plugins: {
-
-                    legend: {
-                        display: true
+    weatherChart = new Chart(canvas, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: "Gemiddelde temperatuur (°C)",
+                data: averages,
+                borderColor: "#3b82f6",
+                backgroundColor: "rgba(59, 130, 246, 0.15)",
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4,
+                pointHoverRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
                     }
-
-                },
-
-                scales: {
-
-                    y: {
-                        beginAtZero: false
-                    }
-
                 }
-
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: textColor
+                    },
+                    grid: {
+                        color: gridColor
+                    },
+                    title: {
+                        display: true,
+                        text: "Temperatuur in °C",
+                        color: textColor
+                    }
+                }
             }
+        }
+    });
+}
 
-        });
+async function loadWeather(city) {
+    const cleanCity = city.trim();
 
+    if (!cleanCity) {
+        setWeatherStatus("Vul eerst een plaatsnaam in.", "error");
+        return;
+    }
+
+    if (weatherButton) {
+        weatherButton.disabled = true;
+        weatherButton.textContent = "Bezig...";
+    }
+
+    setWeatherStatus("Weersgegevens ophalen...");
+
+    try {
+        const location = await getCoordinates(cleanCity);
+        const data = await getForecast(location.latitude, location.longitude);
+
+        document.getElementById("currentTemp").textContent =
+            `${data.current.temperature_2m} °C`;
+
+        document.getElementById("currentRain").textContent =
+            `${data.current.precipitation} mm`;
+
+        document.getElementById("currentWind").textContent =
+            `${data.current.wind_speed_10m} km/u`;
+
+        document.getElementById("currentCity").textContent =
+            location.name;
+
+        // De eerste dag in de dagelijkse voorspelling kan vandaag zijn.
+        // Daarom wordt de voorspelling van morgen op index 1 gezet.
+        const tomorrowIndex = 1;
+
+        document.getElementById("tomorrowMax").textContent =
+            `${data.daily.temperature_2m_max[tomorrowIndex]} °C`;
+
+        document.getElementById("tomorrowMin").textContent =
+            `${data.daily.temperature_2m_min[tomorrowIndex]} °C`;
+
+        document.getElementById("tomorrowRain").textContent =
+            `${data.daily.precipitation_sum[tomorrowIndex]} mm`;
+
+        updateWeatherChart(data);
+
+        setWeatherStatus(
+            `Weer voor ${location.name} is bijgewerkt.`,
+            "success"
+        );
+    } catch (error) {
+        setWeatherStatus(
+            error.message || "Er is iets misgegaan bij het ophalen van het weer.",
+            "error"
+        );
+    } finally {
+        if (weatherButton) {
+            weatherButton.disabled = false;
+            weatherButton.textContent = "Zoek weer";
+        }
+    }
+}
+
+if (weatherButton) {
+    weatherButton.addEventListener("click", () => {
+        loadWeather(cityInput.value);
+    });
+}
+
+if (cityInput) {
+    cityInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            loadWeather(cityInput.value);
+        }
+    });
 }
 
 
-/* Als er eerder een plaats is opgeslagen, laden we die automatisch. */
-const storedCity =
-    localStorage.getItem("weatherCity");
+// ========================================
+// INSTELLINGEN
+// ========================================
 
+const settingsModal = document.getElementById("settingsModal");
+const openSettings = document.getElementById("openSettings");
+const closeSettings = document.getElementById("closeSettings");
+const saveSettings = document.getElementById("saveSettings");
 
-if (storedCity) {
+const themeSelect = document.getElementById("themeSelect");
+const backgroundSelect = document.getElementById("backgroundSelect");
+const nameInput = document.getElementById("nameInput");
+const settingsCityInput = document.getElementById("settingsCityInput");
+const soundToggle = document.getElementById("soundToggle");
 
-    cityInput.value = storedCity;
-
-    loadWeather(storedCity);
-
+function openSettingsModal() {
+    settingsModal?.classList.add("open");
 }
 
-
-/* ============================================================
-   KLEURMODEL
-   Dit gedeelte rekent RGB om naar hexadecimaal.
-   ============================================================ */
-
-const colorButton =
-    document.getElementById("colorButton");
-
-
-const redInput =
-    document.getElementById("redInput");
-
-const greenInput =
-    document.getElementById("greenInput");
-
-const blueInput =
-    document.getElementById("blueInput");
-
-
-function decimalToHex(value) {
-
-    return Number(value)
-        .toString(16)
-        .padStart(2, "0")
-        .toUpperCase();
-
+function closeSettingsModal() {
+    settingsModal?.classList.remove("open");
 }
 
+openSettings?.addEventListener("click", openSettingsModal);
+closeSettings?.addEventListener("click", closeSettingsModal);
 
-function updateColor() {
+settingsModal?.addEventListener("click", (event) => {
+    if (event.target === settingsModal) {
+        closeSettingsModal();
+    }
+});
 
-    /* INVOER:
-       Drie decimale RGB-waarden tussen 0 en 255. */
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeSettingsModal();
+    }
+});
 
-    const red =
-        Math.min(255, Math.max(0, Number(redInput.value)));
+function applyTheme(theme) {
+    const prefersLight = window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: light)").matches;
 
-    const green =
-        Math.min(255, Math.max(0, Number(greenInput.value)));
+    const useLightTheme = theme === "light" ||
+        (theme === "auto" && prefersLight);
 
-    const blue =
-        Math.min(255, Math.max(0, Number(blueInput.value)));
+    document.body.classList.toggle("light-theme", useLightTheme);
 
+    if (weatherChart) {
+        // De grafiek opnieuw tekenen als er al weergegevens zijn.
+        // De volgende weeropvraag gebruikt de nieuwe themakleuren.
+        weatherChart.options.plugins.legend.labels.color =
+            useLightTheme ? "#475569" : "#cbd5e1";
 
-    /* VERWERKING:
-       De drie waarden worden omgezet naar hexadecimale waarden. */
-
-    const hex =
-        `#${decimalToHex(red)}${decimalToHex(green)}${decimalToHex(blue)}`;
-
-
-    /* UITVOER:
-       De kleur, RGB-code en hex-code worden getoond. */
-
-    document.getElementById("rgbPreview").style.background =
-        `rgb(${red}, ${green}, ${blue})`;
-
-    document.getElementById("rgbValue").textContent =
-        `(${red}, ${green}, ${blue})`;
-
-    document.getElementById("hexValue").textContent =
-        hex;
-
-    document.getElementById("colorOutput").textContent =
-        `RGB(${red}, ${green}, ${blue}) → ${hex}`;
-
+        weatherChart.update();
+    }
 }
 
+function applyBackground(background) {
+    document.body.dataset.background = background;
 
-colorButton.addEventListener("click", updateColor);
+    const animated = background === "animated";
+
+    if (!animated) {
+        document.body.style.setProperty("--background-transform", "none");
+    }
+}
+
+function applyAccent(color) {
+    document.documentElement.style.setProperty("--accent", color);
+
+    const darkerColors = {
+        "#3b82f6": "#2563eb",
+        "#8b5cf6": "#7c3aed",
+        "#10b981": "#059669",
+        "#f97316": "#ea580c"
+    };
+
+    document.documentElement.style.setProperty(
+        "--accent-dark",
+        darkerColors[color] || color
+    );
+
+    document.querySelectorAll(".accent").forEach((button) => {
+        button.classList.toggle(
+            "selected",
+            button.dataset.accent === color
+        );
+    });
+}
+
+function loadSettings() {
+    let settings = {};
+
+    try {
+        settings = JSON.parse(localStorage.getItem("websiteSettings") || "{}");
+    } catch {
+        settings = {};
+    }
+
+    const theme = settings.theme || "auto";
+    const background = settings.background || "animated";
+    const accent = settings.accent || "#3b82f6";
+
+    if (themeSelect) {
+        themeSelect.value = theme;
+    }
+
+    if (backgroundSelect) {
+        backgroundSelect.value = background;
+    }
+
+    if (nameInput) {
+        nameInput.value = settings.name || "";
+    }
+
+    if (settingsCityInput) {
+        settingsCityInput.value = settings.city || "";
+    }
+
+    if (soundToggle) {
+        soundToggle.checked = settings.sound !== false;
+    }
+
+    applyTheme(theme);
+    applyBackground(background);
+    applyAccent(accent);
+
+    if (settings.city && cityInput) {
+        cityInput.value = settings.city;
+    }
+
+    if (settings.city) {
+        loadWeather(settings.city);
+    }
+}
+
+document.querySelectorAll(".accent").forEach((button) => {
+    button.addEventListener("click", () => {
+        applyAccent(button.dataset.accent);
+    });
+});
+
+themeSelect?.addEventListener("change", () => {
+    applyTheme(themeSelect.value);
+});
+
+backgroundSelect?.addEventListener("change", () => {
+    applyBackground(backgroundSelect.value);
+});
+
+saveSettings?.addEventListener("click", () => {
+    const settings = {
+        theme: themeSelect?.value || "auto",
+        background: backgroundSelect?.value || "animated",
+        name: nameInput?.value.trim() || "",
+        city: settingsCityInput?.value.trim() || "",
+        sound: soundToggle?.checked ?? true,
+        accent: getComputedStyle(document.documentElement)
+            .getPropertyValue("--accent").trim() || "#3b82f6"
+    };
+
+    try {
+        localStorage.setItem("websiteSettings", JSON.stringify(settings));
+    } catch {
+        // De website blijft werken als opslag niet beschikbaar is.
+    }
+
+    applyTheme(settings.theme);
+    applyBackground(settings.background);
+    applyAccent(settings.accent);
+
+    if (settings.city && cityInput) {
+        cityInput.value = settings.city;
+        loadWeather(settings.city);
+    }
+
+    closeSettingsModal();
+});
+
+loadSettings();
 
 
-/* ============================================================
-   PENALTY GAME
-   ============================================================ */
+// ========================================
+// PENALTY GAME
+// ========================================
 
-const goalZones =
-    document.querySelectorAll(".goal-zone");
-
-const keeper =
-    document.getElementById("keeper");
-
-const scoreElement =
-    document.getElementById("score");
-
-const streakElement =
-    document.getElementById("streak");
-
-const gameMessage =
-    document.getElementById("gameMessage");
-
-const keeperStatus =
-    document.getElementById("keeperStatus");
-
-const resetGameButton =
-    document.getElementById("resetGame");
-
+const goalZones = document.querySelectorAll(".goal-zone");
+const keeper = document.getElementById("keeper");
+const scoreElement = document.getElementById("score");
+const streakElement = document.getElementById("streak");
+const keeperStatus = document.getElementById("keeperStatus");
+const gameMessage = document.getElementById("gameMessage");
+const resetGameButton = document.getElementById("resetGame");
 
 let score = 0;
 let streak = 0;
+let gameLocked = false;
 
+const keeperPositions = {
+    "top-left": { left: "17%", top: "18%" },
+    "top-center": { left: "50%", top: "18%" },
+    "top-right": { left: "83%", top: "18%" },
+    "middle-left": { left: "17%", top: "50%" },
+    "middle-center": { left: "50%", top: "50%" },
+    "middle-right": { left: "83%", top: "50%" },
+    "bottom-left": { left: "17%", top: "82%" },
+    "bottom-center": { left: "50%", top: "82%" },
+    "bottom-right": { left: "83%", top: "82%" }
+};
 
-/* De keeper kiest willekeurig een zone. */
-function randomKeeperZone() {
+function updateGameStats() {
+    if (scoreElement) {
+        scoreElement.textContent = score;
+    }
 
-    const zones = [
-        "top-left",
-        "top-center",
-        "top-right",
-        "middle-left",
-        "middle-center",
-        "middle-right",
-        "bottom-left",
-        "bottom-center",
-        "bottom-right"
-    ];
-
-    return zones[
-        Math.floor(Math.random() * zones.length)
-    ];
-
+    if (streakElement) {
+        streakElement.textContent = streak;
+    }
 }
 
+function shootPenalty(zoneElement) {
+    if (gameLocked) {
+        return;
+    }
 
-/* Visuele positie van de keeper */
-function moveKeeper(zone) {
+    gameLocked = true;
 
-    const positions = {
+    const chosenZone = zoneElement.dataset.zone;
+    const zoneNames = Object.keys(keeperPositions);
+    const keeperChoice = zoneNames[
+        Math.floor(Math.random() * zoneNames.length)
+    ];
 
-        "top-left": ["20%", "20%"],
-        "top-center": ["50%", "20%"],
-        "top-right": ["80%", "20%"],
+    const position = keeperPositions[keeperChoice];
 
-        "middle-left": ["20%", "50%"],
-        "middle-center": ["50%", "50%"],
-        "middle-right": ["80%", "50%"],
+    if (keeper) {
+        keeper.style.left = position.left;
+        keeper.style.top = position.top;
+    }
 
-        "bottom-left": ["20%", "80%"],
-        "bottom-center": ["50%", "80%"],
-        "bottom-right": ["80%", "80%"]
+    if (keeperStatus) {
+        keeperStatus.textContent = "Duikt";
+    }
 
-    };
+    if (chosenZone === keeperChoice) {
+        streak = 0;
 
-
-    const position =
-        positions[zone];
-
-
-    keeper.style.left =
-        position[0];
-
-    keeper.style.top =
-        position[1];
-
-}
-
-
-/* Een penalty wordt geschoten wanneer een zone wordt aangeklikt. */
-goalZones.forEach(zone => {
-
-    zone.addEventListener("click", () => {
-
-        const playerChoice =
-            zone.dataset.zone;
-
-        const keeperChoice =
-            randomKeeperZone();
-
-
-        moveKeeper(keeperChoice);
-
-
-        if (playerChoice === keeperChoice) {
-
-            /* Keeper stopt de bal. */
-
-            streak = 0;
-
-            keeperStatus.textContent =
-                "Geraden!";
-
-            gameMessage.textContent =
-                "🧤 De keeper heeft hem!";
-
-        } else {
-
-            /* Goal! */
-
-            score++;
-
-            streak++;
-
-            keeperStatus.textContent =
-                "Goal!";
-
-            gameMessage.textContent =
-                "⚽ GOOOAL!";
-
+        if (gameMessage) {
+            gameMessage.textContent = "De keeper houdt de bal tegen.";
         }
 
+        zoneElement.classList.add("saved");
+    } else {
+        score += 1;
+        streak += 1;
 
-        scoreElement.textContent =
-            score;
+        if (gameMessage) {
+            gameMessage.textContent = "Doelpunt. Je hebt gescoord.";
+        }
 
-        streakElement.textContent =
-            streak;
+        zoneElement.classList.add("scored");
+    }
 
+    updateGameStats();
+
+    window.setTimeout(() => {
+        if (keeper) {
+            keeper.style.left = "50%";
+            keeper.style.top = "50%";
+        }
+
+        if (keeperStatus) {
+            keeperStatus.textContent = "Klaar";
+        }
+
+        zoneElement.classList.remove("saved", "scored");
+        gameLocked = false;
+    }, 900);
+}
+
+goalZones.forEach((zone) => {
+    zone.setAttribute("role", "button");
+    zone.setAttribute("tabindex", "0");
+
+    zone.addEventListener("click", () => {
+        shootPenalty(zone);
     });
 
+    zone.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            shootPenalty(zone);
+        }
+    });
 });
 
-
-/* Resetknop van het spel */
-resetGameButton.addEventListener("click", () => {
-
+resetGameButton?.addEventListener("click", () => {
     score = 0;
-
     streak = 0;
+    gameLocked = false;
 
-    scoreElement.textContent = "0";
+    if (keeper) {
+        keeper.style.left = "50%";
+        keeper.style.top = "50%";
+    }
 
-    streakElement.textContent = "0";
+    if (keeperStatus) {
+        keeperStatus.textContent = "Klaar";
+    }
 
-    keeperStatus.textContent = "Klaar";
+    if (gameMessage) {
+        gameMessage.textContent = "Kies een plek om te schieten.";
+    }
 
-    gameMessage.textContent =
-        "Kies een plek om te schieten!";
-
-    keeper.style.left = "50%";
-
-    keeper.style.top = "50%";
-
+    updateGameStats();
 });
 
-
-/* ============================================================
-   GELUID
-   Een eenvoudige instelling wordt opgeslagen.
-   ============================================================ */
-
-const soundToggle =
-    document.getElementById("soundToggle");
-
-
-soundToggle.addEventListener("change", () => {
-
-    localStorage.setItem(
-        "websiteSound",
-        soundToggle.checked
-    );
-
-});
-
-
-const savedSound =
-    localStorage.getItem("websiteSound");
-
-
-if (savedSound !== null) {
-
-    soundToggle.checked =
-        savedSound === "true";
-
-}
+updateGameStats();

@@ -3,1147 +3,588 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Antoine - Informatica Website</title>
-
-    <!-- Het externe CSS-bestand bevat alle opmaak van de website. -->
+    <title>Antoine | Informatica</title>
+    <meta name="description" content="Informaticawebsite met uitleg over kleurmodellen, het binaire stelsel, compressie en kunstmatige intelligentie.">
     <link rel="stylesheet" href="style.css">
-
-    <!-- Chart.js wordt gebruikt voor de grafiek op de weerpagina. -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-
-    <!-- =========================================================
-         LINKER MENU
-         Het menu bestaat uit een ul met li-elementen.
-         Elke li bevat een a-element waarmee een pagina wordt geopend.
-         ========================================================= -->
-
     <aside class="sidebar">
-
-        <!-- Logo/titel van de website -->
         <div class="logo">
-            <span>💻</span>
+            <span></span>
             <h2>Mijn website</h2>
         </div>
 
-        <!-- Navigatiemenu -->
         <ul class="menu">
-
-            <!-- Link naar de homepage / Over mij -->
-            <li>
-                <a href="#" class="nav-link active" data-page="home">
-                    👤 <span>Over mij</span>
-                </a>
-            </li>
-
-            <!-- Link naar het weerbericht -->
-            <li>
-                <a href="#" class="nav-link" data-page="weather">
-                    🌤️ <span>Weerbericht</span>
-                </a>
-            </li>
-
-            <!-- Link naar het kleurmodellen-onderdeel -->
-            <li>
-                <a href="#" class="nav-link" data-page="colors">
-                    🎨 <span>Kleurmodellen</span>
-                </a>
-            </li>
-
-            <!-- Link naar het binaire stelsel -->
-            <li>
-                <a href="#" class="nav-link" data-page="binary">
-                    🔢 <span>Binair stelsel</span>
-                </a>
-            </li>
-
-            <!-- Link naar compressie -->
-            <li>
-                <a href="#" class="nav-link" data-page="compression">
-                    🗜️ <span>Compressie</span>
-                </a>
-            </li>
-
-            <!-- Link naar AI -->
-            <li>
-                <a href="#" class="nav-link" data-page="ai">
-                    🤖 <span>AI</span>
-                </a>
-            </li>
-
-            <!-- Link naar het penaltyspel -->
-            <li>
-                <a href="#" class="nav-link" data-page="game">
-                    ⚽ <span>Penalty Game</span>
-                </a>
-            </li>
+            <li><a href="#" class="nav-link active" data-page="home"><span>Over mij</span></a></li>
+            <li><a href="#" class="nav-link" data-page="weather"><span>Weerbericht</span></a></li>
+            <li><a href="#" class="nav-link" data-page="colors"><span>Kleurmodellen</span></a></li>
+            <li><a href="#" class="nav-link" data-page="binary"><span>Binair stelsel</span></a></li>
+            <li><a href="#" class="nav-link" data-page="compression"><span>Compressie</span></a></li>
+            <li><a href="#" class="nav-link" data-page="ai"><span>AI</span></a></li>
+            <li><a href="#" class="nav-link" data-page="game"><span>Penalty Game</span></a></li>
         </ul>
 
-        <!-- Kleine tekst onder het menu -->
-        <div class="sidebar-footer">
-            Informatica • 2026
-        </div>
+        <div class="sidebar-footer">Informatica • 2026</div>
     </aside>
 
-
-    <!-- =========================================================
-         HOOFDGEDEELTE
-         Hier wordt de inhoud van de verschillende pagina's getoond.
-         ========================================================= -->
-
     <main class="main-content">
+        <button class="settings-button" id="openSettings" title="Instellingen" aria-label="Instellingen"></button>
 
-        <!-- Instellingenknop rechtsboven -->
-        <button class="settings-button" id="openSettings" title="Instellingen">
-            ⚙️
-        </button>
-
-
-        <!-- =====================================================
-             HOMEPAGE
-             ===================================================== -->
-
+        <!-- HOMEPAGE -->
         <section id="home" class="page active-page">
-
             <div class="hero-card">
-
                 <div>
-                    <span class="eyebrow">WELKOM OP MIJN WEBSITE</span>
-
-                    <h1>Hoi, ik ben <span id="displayName">Antoine</span> 👋</h1>
-
+                    <span class="eyebrow">INFORMATICA · PROJECT</span>
+                    <h1>Over mij</h1>
                     <p class="hero-text">
-                        Welkom op mijn informaticawebsite. Hier vertel ik iets over
-                        mezelf en laat ik verschillende onderwerpen uit de
-                        informatica zien.
+                        Ik ben Antoine. Op deze website presenteer ik onderwerpen uit de informatica
+                        en laat ik zien hoe ik de theorie toepas in interactieve voorbeelden.
                     </p>
-
-                    <button class="primary-button" onclick="showPage('weather')">
-                        Bekijk het weer →
+                    <button class="primary-button" onclick="document.getElementById('onderwerpen').scrollIntoView({behavior:'smooth'})">
+                        Bekijk de onderwerpen
                     </button>
                 </div>
+            </div>
 
-                <div class="hero-icon">
-                    💻
+            <div class="content-grid intro-grid">
+                <article class="glass-card">
+                    <h2>Persoonlijke informatie</h2>
+                    <p>Mijn hobby's zijn voetbal en gamen. Deze interesses komen terug in het penaltyspel en in de interactieve onderdelen van de website.</p>
+                </article>
+                <article class="glass-card">
+                    <h2>Over deze website</h2>
+                    <p>De website bevat uitleg over informatica, voorbeelden van gegevensverwerking, een weerbericht en een klein spel.</p>
+                </article>
+            </div>
+
+            <section id="onderwerpen" class="topics-section">
+                <div class="page-heading">
+                    <span class="eyebrow">THEORIE</span>
+                    <h2>Informatica-onderwerpen</h2>
+                    <p>Selecteer een onderwerp om de uitleg en voorbeelden te bekijken.</p>
                 </div>
 
-            </div>
+                <div class="topic-grid">
+                    <button class="topic-card reveal" onclick="showPage('colors')">
+                        <span class="topic-number">01</span>
+                        <h3>Kleurmodellen</h3>
+                        <p>RGB, hexadecimale kleurcodes en het omzetten van kleurwaarden.</p>
+                        <span class="topic-link">Bekijk uitleg <span aria-hidden="true">→</span></span>
+                    </button>
 
+                    <button class="topic-card reveal" onclick="showPage('binary')">
+                        <span class="topic-number">02</span>
+                        <h3>Binair stelsel</h3>
+                        <p>Bits, machten van twee en de manier waarop binaire getallen werken.</p>
+                        <span class="topic-link">Bekijk uitleg <span aria-hidden="true">→</span></span>
+                    </button>
 
-            <!-- Informatie over mij -->
-            <div class="content-grid">
+                    <button class="topic-card reveal" onclick="showPage('compression')">
+                        <span class="topic-number">03</span>
+                        <h3>Compressie</h3>
+                        <p>Het verschil tussen bitmap- en vectorafbeeldingen.</p>
+                        <span class="topic-link">Bekijk uitleg <span aria-hidden="true">→</span></span>
+                    </button>
 
-                <article class="glass-card">
-                    <span class="card-icon">👤</span>
+                    <button class="topic-card reveal" onclick="showPage('ai')">
+                        <span class="topic-number">04</span>
+                        <h3>Kunstmatige intelligentie</h3>
+                        <p>Toepassingen van AI, leren met AI en slimme telefoonfuncties.</p>
+                        <span class="topic-link">Bekijk uitleg <span aria-hidden="true">→</span></span>
+                    </button>
+                </div>
+            </section>
 
-                    <h2>Over mij</h2>
-
-                    <p>
-                        Ik ben Antoine. Mijn hobby's zijn voetbal spelen en gamen.
-                        Op deze website combineer ik mijn interesses met wat ik
-                        leer bij informatica.
-                    </p>
-                </article>
-
-
-                <article class="glass-card">
-                    <span class="card-icon">⚽</span>
-
-                    <h2>Mijn hobby's</h2>
-
-                    <p>
-                        Een van mijn grootste hobby's is voetbal. Daarom heb ik
-                        ook een eigen penaltyspel op mijn website gemaakt.
-                    </p>
-                </article>
-
-
-                <article class="glass-card">
-                    <span class="card-icon">🎮</span>
-
-                    <h2>Gamen</h2>
-
-                    <p>
-                        Ik vind gamen leuk en daarom wilde ik ook interactieve
-                        onderdelen aan mijn website toevoegen.
-                    </p>
-                </article>
-
-            </div>
-
-
-            <!-- =================================================
-                 SCHOOL HTML-VOORBEELD
-                 Dit onderdeel laat verschillende HTML-opmaak zien.
-                 ================================================= -->
-
-            <div class="glass-card school-card">
-
-                <span class="eyebrow">HTML-VOORBEELD</span>
-
-                <h2>Dit is mijn website</h2>
-
-                <h3>lijst</h3>
-
-                <ul class="example-list">
-                    <li><strong>Dit is dikgedrukte tekst</strong></li>
-                    <li><em>Dit is cursieve tekst</em></li>
-                    <li><u>Dit is onderstreepte tekst</u></li>
-                    <li class="red-text">Dit is rode tekst</li>
-                    <li class="large-text">Dit is grotere tekst</li>
-                </ul>
-
-            </div>
-
-
-            <!-- =================================================
-                 INVOER - VERWERKING - UITVOER
-                 ================================================= -->
-
-            <div class="glass-card">
-
-                <span class="eyebrow">INFORMATICA</span>
-
-                <h2>Invoer → verwerking → uitvoer</h2>
-
+            <div class="glass-card ivo-home-card">
+                <span class="eyebrow">PRAKTISCH VOORBEELD</span>
+                <h2>Invoer, verwerking en uitvoer</h2>
                 <div class="ivo-grid">
-
                     <div>
                         <span class="ivo-number">01</span>
                         <h3>Invoer</h3>
-                        <p>
-                            De gebruiker voert bijvoorbeeld zijn naam,
-                            plaats of instellingen in.
-                        </p>
+                        <p>De gebruiker voert gegevens in, zoals een plaatsnaam of RGB-waarden.</p>
                     </div>
-
                     <div>
                         <span class="ivo-number">02</span>
                         <h3>Verwerking</h3>
-                        <p>
-                            JavaScript verwerkt de ingevoerde gegevens en
-                            haalt bijvoorbeeld weergegevens op.
-                        </p>
+                        <p>JavaScript verwerkt de invoer en haalt bijvoorbeeld weersgegevens op of berekent een kleurcode.</p>
                     </div>
-
                     <div>
                         <span class="ivo-number">03</span>
                         <h3>Uitvoer</h3>
-                        <p>
-                            Het resultaat wordt op het scherm weergegeven.
-                            Bijvoorbeeld de temperatuur of een score.
-                        </p>
+                        <p>De uitkomst verschijnt op het scherm, bijvoorbeeld de temperatuur, kleur of speluitslag.</p>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================================
-             WEER
-             ===================================================== -->
-
+        <!-- WEERBERICHT -->
         <section id="weather" class="page">
-
             <div class="page-heading">
                 <span class="eyebrow">ACTUEEL WEER</span>
-                <h1>Weerbericht 🌤️</h1>
-                <p>
-                    Bekijk het actuele weer, de verwachting van morgen en
-                    het gemiddelde van de komende dagen.
-                </p>
+                <h1>Weerbericht</h1>
+                <p>Bekijk het actuele weer, de verwachting van morgen en het gemiddelde van de komende dagen.</p>
             </div>
 
-
-            <!-- Zoekveld voor een plaats -->
             <div class="glass-card weather-search">
-
                 <label for="cityInput">Plaats</label>
-
                 <div class="input-row">
-
-                    <input
-                        type="text"
-                        id="cityInput"
-                        placeholder="Bijvoorbeeld Amsterdam"
-                    >
-
-                    <button class="primary-button" id="weatherButton">
-                        Zoek weer
-                    </button>
-
+                    <input type="text" id="cityInput" placeholder="Bijvoorbeeld Amsterdam">
+                    <button class="primary-button" id="weatherButton">Zoek weer</button>
                 </div>
-
-                <p id="weatherStatus" class="status-text">
-                    Voer een plaats in om het weer te bekijken.
-                </p>
-
+                <p id="weatherStatus" class="status-text">Voer een plaats in om het weer te bekijken.</p>
             </div>
 
-
-            <!-- Weerkaarten -->
             <div class="weather-grid">
-
                 <div class="weather-card">
-                    <span>🌡️</span>
+                    <span></span>
                     <p>Temperatuur</p>
                     <strong id="currentTemp">-- °C</strong>
                 </div>
-
                 <div class="weather-card">
-                    <span>🌧️</span>
+                    <span></span>
                     <p>Neerslag</p>
                     <strong id="currentRain">-- mm</strong>
                 </div>
-
                 <div class="weather-card">
-                    <span>💨</span>
+                    <span></span>
                     <p>Wind</p>
                     <strong id="currentWind">-- km/u</strong>
                 </div>
-
                 <div class="weather-card">
-                    <span>📍</span>
+                    <span></span>
                     <p>Plaats</p>
                     <strong id="currentCity">--</strong>
                 </div>
-
             </div>
 
-
-            <!-- Morgen -->
             <div class="glass-card">
-
                 <h2>Morgen</h2>
-
                 <div class="tomorrow-grid">
-
                     <div>
                         <span>⬆️</span>
                         <p>Maximum</p>
                         <strong id="tomorrowMax">-- °C</strong>
                     </div>
-
                     <div>
                         <span>⬇️</span>
                         <p>Minimum</p>
                         <strong id="tomorrowMin">-- °C</strong>
                     </div>
-
                     <div>
-                        <span>🌧️</span>
+                        <span></span>
                         <p>Neerslag</p>
                         <strong id="tomorrowRain">-- mm</strong>
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- Grafiek -->
             <div class="glass-card chart-card">
-
                 <h2>Gemiddelde temperatuur komende dagen</h2>
-
                 <div class="chart-container">
                     <canvas id="weatherChart"></canvas>
                 </div>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================================
-             KLEURMODELLEN
-             ===================================================== -->
-
+        <!-- KLEURMODELLEN -->
         <section id="colors" class="page">
-
             <div class="page-heading">
                 <span class="eyebrow">INFORMATICA</span>
-                <h1>Kleurmodellen 🎨</h1>
-                <p>
-                    Op deze pagina leg ik uit hoe kleuren digitaal worden
-                    weergegeven met RGB en hexadecimale waarden.
-                </p>
+                <h1>Kleurmodellen</h1>
+                <p>Op deze pagina leg ik uit hoe kleuren digitaal worden weergegeven met RGB en hexadecimale waarden.</p>
             </div>
 
-
             <div class="glass-card">
-
                 <h2>RGB-model</h2>
-
                 <p>
                     RGB staat voor <strong>Rood, Groen en Blauw</strong>.
-                    Een computerscherm maakt kleuren door deze drie kleuren
-                    te combineren. Iedere waarde loopt van 0 tot en met 255.
+                    Een computerscherm maakt kleuren door deze drie kleuren te combineren.
+                    Iedere waarde loopt van 0 tot en met 255.
                 </p>
 
                 <div class="rgb-example">
-
                     <div class="color-square" id="rgbPreview"></div>
-
                     <div>
                         <h3>Voorbeeldkleur</h3>
-
-                        <p>
-                            RGB:
-                            <strong id="rgbValue">(50, 120, 255)</strong>
-                        </p>
-
-                        <p>
-                            Hex:
-                            <strong id="hexValue">#3278FF</strong>
-                        </p>
+                        <p>RGB: <strong id="rgbValue">(50, 120, 255)</strong></p>
+                        <p>Hex: <strong id="hexValue">#3278FF</strong></p>
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- RGB-invoer -->
             <div class="glass-card">
-
                 <h2>Zelf een RGB-kleur maken</h2>
-
-                <p>
-                    Dit is ook een voorbeeld van
-                    <strong>invoer → verwerking → uitvoer</strong>.
-                </p>
+                <p>Dit is ook een voorbeeld van <strong>invoer → verwerking → uitvoer</strong>.</p>
 
                 <div class="rgb-input-grid">
-
                     <label>
                         Rood
                         <input type="number" id="redInput" min="0" max="255" value="50">
                     </label>
-
                     <label>
                         Groen
                         <input type="number" id="greenInput" min="0" max="255" value="120">
                     </label>
-
                     <label>
                         Blauw
                         <input type="number" id="blueInput" min="0" max="255" value="255">
                     </label>
-
                 </div>
 
-                <button class="primary-button" id="colorButton">
-                    Maak kleur
-                </button>
-
-                <div class="color-output" id="colorOutput">
-                    RGB(50, 120, 255) → #3278FF
+                <div class="color-output">
+                    <div class="color-square" id="customColorPreview"></div>
+                    <div>
+                        <p>RGB: <strong id="customRgbValue">(50, 120, 255)</strong></p>
+                        <p>Hex: <strong id="customHexValue">#3278FF</strong></p>
+                    </div>
                 </div>
-
             </div>
-
 
             <div class="glass-card">
-
-                <h2>Decimaal en hexadecimaal</h2>
-
+                <h2>Hexadecimale kleurcodes</h2>
                 <p>
-                    RGB gebruikt decimale getallen van 0 tot 255.
-                    Bij hexadecimale kleuren worden waarden geschreven met
-                    cijfers 0-9 en letters A-F.
+                    Een hexadecimale kleurcode begint met een hekje en bestaat uit zes tekens.
+                    De eerste twee tekens geven rood aan, de volgende twee groen en de laatste twee blauw.
+                    De tekens kunnen cijfers van 0 tot en met 9 en letters van A tot en met F zijn.
                 </p>
-
-                <div class="hex-table">
-
-                    <div>
-                        <strong>Decimaal</strong>
-                        <span>255</span>
-                        <span>128</span>
-                        <span>0</span>
-                    </div>
-
-                    <div>
-                        <strong>Hex</strong>
-                        <span>FF</span>
-                        <span>80</span>
-                        <span>00</span>
-                    </div>
-
+                <div class="hex-examples">
+                    <div><span class="hex-color black"></span><strong>#000000</strong><p>Zwart</p></div>
+                    <div><span class="hex-color white"></span><strong>#FFFFFF</strong><p>Wit</p></div>
+                    <div><span class="hex-color red"></span><strong>#FF0000</strong><p>Rood</p></div>
+                    <div><span class="hex-color green"></span><strong>#00FF00</strong><p>Groen</p></div>
+                    <div><span class="hex-color blue"></span><strong>#0000FF</strong><p>Blauw</p></div>
                 </div>
-
             </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             BINair stelsel
-             ===================================================== -->
-
+        </section>        <!-- BINAIR STELSEL -->
         <section id="binary" class="page">
-
             <div class="page-heading">
                 <span class="eyebrow">GETALLENSTELSEL</span>
-                <h1>Binair stelsel 🔢</h1>
-
-                <p>
-                    Computers werken met bits. Een bit kan de waarde 0 of 1
-                    hebben.
-                </p>
+                <h1>Binair stelsel</h1>
+                <p>Computers werken met bits. Een bit kan de waarde 0 of 1 hebben.</p>
             </div>
 
-
             <div class="glass-card">
-
                 <h2>Wat is binair?</h2>
-
                 <p>
-                    Het binaire stelsel is een getallenstelsel met slechts twee
-                    cijfers: <strong>0 en 1</strong>. Iedere positie heeft een
-                    waarde die een macht van 2 is.
+                    Het binaire stelsel gebruikt alleen de cijfers 0 en 1.
+                    Iedere positie heeft een waarde die een macht van 2 is.
                 </p>
 
                 <div class="binary-values">
-
-                    <div>
-                        <span>128</span>
-                        <strong>1</strong>
-                    </div>
-
-                    <div>
-                        <span>64</span>
-                        <strong>0</strong>
-                    </div>
-
-                    <div>
-                        <span>32</span>
-                        <strong>1</strong>
-                    </div>
-
-                    <div>
-                        <span>16</span>
-                        <strong>0</strong>
-                    </div>
-
-                    <div>
-                        <span>8</span>
-                        <strong>0</strong>
-                    </div>
-
-                    <div>
-                        <span>4</span>
-                        <strong>1</strong>
-                    </div>
-
-                    <div>
-                        <span>2</span>
-                        <strong>0</strong>
-                    </div>
-
-                    <div>
-                        <span>1</span>
-                        <strong>1</strong>
-                    </div>
-
+                    <div><span>128</span><strong>1</strong></div>
+                    <div><span>64</span><strong>0</strong></div>
+                    <div><span>32</span><strong>1</strong></div>
+                    <div><span>16</span><strong>0</strong></div>
+                    <div><span>8</span><strong>0</strong></div>
+                    <div><span>4</span><strong>1</strong></div>
+                    <div><span>2</span><strong>0</strong></div>
+                    <div><span>1</span><strong>1</strong></div>
                 </div>
 
                 <p class="example-text">
                     Bijvoorbeeld: <strong>10100101</strong> =
                     128 + 32 + 4 + 1 = <strong>165</strong>.
                 </p>
-
             </div>
 
-
-            <!-- Klikbare afbeelding naar Binary Bonanza -->
             <div class="glass-card">
-
-                <h2>Binary Bonanza</h2>
-
-                <p>
-                    Via de afbeelding hieronder kun je Binary Bonanza openen.
-                    Het spel helpt om te oefenen met binaire getallen.
-                </p>
-
-                <!--
-                    De afbeelding is klikbaar doordat de SVG binnen een
-                    a-element staat. De link gaat naar Binary Bonanza.
-                -->
-                <a
-                    class="binary-game-image"
-                    href="https://games.penjee.com/binary-bonanza/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Open Binary Bonanza"
-                >
-
-                    <svg
-                        viewBox="0 0 900 300"
-                        role="img"
-                        aria-label="Klikbare afbeelding van Binary Bonanza"
-                    >
-
-                        <rect
-                            x="0"
-                            y="0"
-                            width="900"
-                            height="300"
-                            rx="30"
-                            fill="#111827"
-                        />
-
-                        <text
-                            x="450"
-                            y="100"
-                            text-anchor="middle"
-                            fill="white"
-                            font-size="60"
-                            font-family="Arial"
-                            font-weight="bold"
-                        >
-                            01010110
-                        </text>
-
-                        <text
-                            x="450"
-                            y="165"
-                            text-anchor="middle"
-                            fill="#9ca3af"
-                            font-size="28"
-                            font-family="Arial"
-                        >
-                            BINARY BONANZA
-                        </text>
-
-                        <text
-                            x="450"
-                            y="225"
-                            text-anchor="middle"
-                            fill="#60a5fa"
-                            font-size="22"
-                            font-family="Arial"
-                        >
-                            Klik hier om het spel te spelen →
-                        </text>
-
+                <h2>Oefenen met binaire getallen</h2>
+                <p>Open het spel via de afbeelding om zelf te oefenen.</p>
+                <a class="binary-game-image"
+                   href="https://games.penjee.com/binary-bonanza/"
+                   target="_blank" rel="noopener noreferrer"
+                   aria-label="Open Binary Bonanza">
+                    <svg viewBox="0 0 900 300" role="img"
+                         aria-label="Afbeelding van Binary Bonanza">
+                        <rect width="900" height="300" rx="30" fill="#111827"/>
+                        <text x="450" y="100" text-anchor="middle"
+                              fill="white" font-size="60" font-family="Arial"
+                              font-weight="bold">01010110</text>
+                        <text x="450" y="165" text-anchor="middle"
+                              fill="#9ca3af" font-size="28"
+                              font-family="Arial">BINARY BONANZA</text>
+                        <text x="450" y="225" text-anchor="middle"
+                              fill="#60a5fa" font-size="22"
+                              font-family="Arial">Klik hier om het spel te spelen →</text>
                     </svg>
-
                 </a>
-
             </div>
 
-
-            <!-- YouTube-video -->
             <div class="glass-card video-card">
-
                 <h2>Video over het binaire stelsel</h2>
-
                 <div class="video-wrapper">
-
                     <iframe
                         src="https://www.youtube-nocookie.com/embed/sXxwr66Y79Y"
-                        title="The binary number system"
-                        loading="lazy"
-                        allowfullscreen>
+                        title="Uitleg over het binaire stelsel"
+                        loading="lazy" allowfullscreen>
                     </iframe>
-
                 </div>
-
                 <h3>Waarom heb ik deze video gekozen?</h3>
-
                 <p>
-                    Ik heb deze video gekozen omdat hij op een duidelijke manier
-                    uitlegt wat het binaire stelsel is en waarom computers met
-                    nullen en enen werken. De video laat ook zien hoe de
-                    verschillende machten van 2 worden gebruikt.
+                    Deze video legt uit waarom computers met nullen en enen werken
+                    en hoe machten van twee worden gebruikt om getallen weer te geven.
                 </p>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================================
-             COMPRESSIE
-             ===================================================== -->
-
+        <!-- COMPRESSIE -->
         <section id="compression" class="page">
-
             <div class="page-heading">
                 <span class="eyebrow">DIGITALE MEDIA</span>
-
-                <h1>Compressie 🗜️</h1>
-
+                <h1>Compressie</h1>
                 <p>
                     Compressie wordt gebruikt om bestanden kleiner te maken,
                     bijvoorbeeld afbeeldingen, video's en andere bestanden.
                 </p>
             </div>
 
-
             <div class="content-grid">
-
                 <article class="glass-card">
-
-                    <span class="card-icon">🖼️</span>
-
                     <h2>Bitmap</h2>
-
                     <p>
                         Een bitmapafbeelding bestaat uit veel kleine pixels.
                         Foto's zijn meestal bitmapafbeeldingen.
                     </p>
-
                     <p>
                         Wanneer je een bitmap sterk vergroot, kunnen de pixels
                         zichtbaar worden.
                     </p>
-
                 </article>
 
-
                 <article class="glass-card">
-
-                    <span class="card-icon">📐</span>
-
                     <h2>Vector</h2>
-
                     <p>
                         Een vectorafbeelding wordt opgebouwd uit lijnen,
                         vormen en wiskundige berekeningen.
                     </p>
-
                     <p>
-                        Een vectorafbeelding kan meestal veel groter worden
-                        gemaakt zonder dat de randen pixelig worden.
+                        Een vectorafbeelding kan meestal groter worden gemaakt
+                        zonder dat de randen pixelig worden.
                     </p>
-
                 </article>
-
             </div>
-
 
             <div class="glass-card">
-
                 <h2>Bitmap versus vector</h2>
-
                 <div class="comparison">
-
                     <div class="comparison-item">
                         <strong>Bitmap</strong>
-                        <span>Pixels</span>
-                        <span>Goed voor foto's</span>
+                        <span>Bestaat uit pixels</span>
+                        <span>Geschikt voor foto's</span>
                         <span>Kan pixelig worden</span>
                     </div>
-
                     <div class="comparison-item">
                         <strong>Vector</strong>
-                        <span>Lijnen en vormen</span>
-                        <span>Goed voor logo's</span>
+                        <span>Bestaat uit lijnen en vormen</span>
+                        <span>Geschikt voor logo's</span>
                         <span>Goed schaalbaar</span>
                     </div>
-
                 </div>
-
             </div>
 
-
-            <!-- YouTube-video over bitmap en vector -->
             <div class="glass-card video-card">
-
-                <h2>Video: Vector vs. Bitmap</h2>
-
+                <h2>Video: Vector versus bitmap</h2>
                 <div class="video-wrapper">
-
                     <iframe
                         src="https://www.youtube-nocookie.com/embed/fy9Pby0Gzsc"
-                        title="Vector VS Bitmap"
-                        loading="lazy"
-                        allowfullscreen>
+                        title="Uitleg over vector- en bitmapafbeeldingen"
+                        loading="lazy" allowfullscreen>
                     </iframe>
-
                 </div>
-
                 <h3>Waarom heb ik deze video gekozen?</h3>
-
                 <p>
-                    Ik heb deze video gekozen omdat het verschil tussen bitmap
-                    en vector direct wordt uitgelegd. Daardoor is goed te zien
-                    waarom een foto en een logo op een andere manier kunnen
-                    worden opgeslagen. Ik heb de video bekeken om de verschillen
-                    zelf beter te begrijpen.
+                    De video legt het verschil tussen bitmap en vector uit.
+                    Daardoor wordt duidelijk waarom een foto en een logo
+                    op verschillende manieren kunnen worden opgeslagen.
                 </p>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================================
-             AI
-             ===================================================== -->
-
+        <!-- KUNSTMATIGE INTELLIGENTIE -->
         <section id="ai" class="page">
-
             <div class="page-heading">
                 <span class="eyebrow">KUNSTMATIGE INTELLIGENTIE</span>
-
-                <h1>Artificial Intelligence 🤖</h1>
-
+                <h1>Kunstmatige intelligentie</h1>
                 <p>
-                    AI staat voor Artificial Intelligence, oftewel
-                    kunstmatige intelligentie.
+                    AI staat voor Artificial Intelligence, oftewel kunstmatige
+                    intelligentie.
                 </p>
             </div>
 
-
-            <!-- AI-afbeelding gemaakt met SVG -->
             <div class="ai-visual">
-
                 <svg viewBox="0 0 1000 320" role="img"
                      aria-label="Illustratie van kunstmatige intelligentie">
-
-                    <rect
-                        width="1000"
-                        height="320"
-                        rx="30"
-                        fill="#111827"
-                    />
-
+                    <rect width="1000" height="320" rx="30" fill="#111827"/>
                     <circle cx="500" cy="150" r="85" fill="#2563eb"/>
-
                     <circle cx="470" cy="135" r="12" fill="white"/>
                     <circle cx="530" cy="135" r="12" fill="white"/>
-
-                    <path
-                        d="M455 175 Q500 210 545 175"
-                        fill="none"
-                        stroke="white"
-                        stroke-width="8"
-                        stroke-linecap="round"
-                    />
-
+                    <path d="M455 175 Q500 210 545 175" fill="none"
+                          stroke="white" stroke-width="8" stroke-linecap="round"/>
                     <line x1="500" y1="65" x2="500" y2="25"
                           stroke="#60a5fa" stroke-width="5"/>
-
                     <circle cx="500" cy="20" r="8" fill="#60a5fa"/>
-
-                    <text
-                        x="500"
-                        y="285"
-                        text-anchor="middle"
-                        fill="white"
-                        font-size="38"
-                        font-family="Arial"
-                        font-weight="bold"
-                    >
+                    <text x="500" y="285" text-anchor="middle" fill="white"
+                          font-size="38" font-family="Arial" font-weight="bold">
                         ARTIFICIAL INTELLIGENCE
                     </text>
-
                 </svg>
-
             </div>
-
 
             <div class="content-grid">
-
-                <!-- Waar ik AI voor gebruik -->
                 <article class="glass-card">
-
-                    <span class="card-icon">💡</span>
-
                     <h2>Waar gebruik ik AI voor?</h2>
-
                     <p>
                         Ik gebruik AI vooral als hulpmiddel bij het leren en
-                        programmeren. Ik kan bijvoorbeeld om uitleg vragen
-                        wanneer ik iets in mijn code niet begrijp of ideeën
-                        gebruiken om een probleem op te lossen.
+                        programmeren. Ik kan om uitleg vragen wanneer ik iets
+                        in mijn code niet begrijp of ideeën gebruiken om een
+                        probleem op te lossen.
                     </p>
-
                     <p>
                         Ik probeer de antwoorden niet zomaar over te nemen,
-                        maar te begrijpen wat de code doet. Daardoor leer ik
-                        van AI in plaats van alleen een antwoord te kopiëren.
+                        maar te begrijpen wat de code doet.
                     </p>
-
                 </article>
 
-
-                <!-- Wat ik leer -->
                 <article class="glass-card">
-
-                    <span class="card-icon">📚</span>
-
                     <h2>Leer ik iets van AI?</h2>
-
                     <p>
-                        Ja. Door AI vragen te stellen kan ik bijvoorbeeld
-                        leren waarom HTML, CSS en JavaScript op een bepaalde
-                        manier worden gebruikt.
+                        Door AI vragen te stellen kan ik leren waarom HTML,
+                        CSS en JavaScript op een bepaalde manier worden gebruikt.
                     </p>
-
                     <p>
-                        Ik moet de antwoorden wel controleren, want AI kan
-                        fouten maken. Daarom is AI voor mij vooral een
-                        hulpmiddel en niet een vervanging voor zelf nadenken.
+                        Ik controleer de antwoorden, omdat AI fouten kan maken.
+                        AI is een hulpmiddel en geen vervanging voor zelf nadenken.
                     </p>
-
                 </article>
-
             </div>
 
-
-            <!-- Mobiele telefoon -->
             <div class="glass-card phone-card">
-
                 <div class="phone-illustration">
-
                     <div class="phone-frame">
-
                         <div class="phone-screen">
-
-                            <span class="phone-ai-icon">✨</span>
-
+                            <span class="phone-ai-icon"></span>
                             <strong>AI</strong>
-
                             <small>Circle to Search</small>
-
                         </div>
-
                     </div>
-
                 </div>
 
-
                 <div>
-
                     <span class="eyebrow">MIJN TELEFOON</span>
-
                     <h2>Samsung Galaxy A56 5G</h2>
-
                     <p>
                         Mijn telefoon is een Samsung Galaxy A56 5G. Samsung
                         heeft op dit toestel verschillende slimme functies
-                        geïntegreerd onder de naam <strong>Awesome Intelligence</strong>.
+                        geïntegreerd onder de naam Awesome Intelligence.
                     </p>
-
                     <p>
-                        Een voorbeeld is <strong>Circle to Search</strong>.
-                        Daarmee kan ik iets op mijn scherm omcirkelen om er
-                        informatie over te zoeken. Ook heeft de telefoon
-                        functies zoals Object Eraser voor foto's.
+                        Een voorbeeld is Circle to Search. Daarmee kan ik iets
+                        op mijn scherm omcirkelen om er informatie over te zoeken.
+                        Ook heeft de telefoon functies zoals Object Eraser voor foto's.
                     </p>
-
                 </div>
-
             </div>
 
-
-            <!-- AI video -->
             <div class="glass-card video-card">
-
                 <h2>Korte video over AI</h2>
-
                 <div class="video-wrapper">
-
                     <iframe
                         src="https://www.youtube-nocookie.com/embed/ZjZV9rZSKmE"
-                        title="What is AI? Artificial Intelligence Explained for Beginners"
-                        loading="lazy"
-                        allowfullscreen>
+                        title="Uitleg over kunstmatige intelligentie"
+                        loading="lazy" allowfullscreen>
                     </iframe>
-
                 </div>
-
                 <h3>Waarom heb ik deze video gekozen?</h3>
-
                 <p>
-                    Ik heb deze video gekozen omdat hij speciaal is gemaakt voor
-                    beginners. In korte tijd wordt uitgelegd wat AI is en welke
-                    voorbeelden we in het dagelijks leven tegenkomen. Dat past
-                    goed bij deze schoolopdracht omdat de uitleg begrijpelijk is.
+                    Deze video is bedoeld voor beginners. In korte tijd wordt
+                    uitgelegd wat AI is en welke voorbeelden we in het dagelijks
+                    leven tegenkomen.
                 </p>
-
             </div>
-
         </section>
 
-
-        <!-- =====================================================
-             PENALTY GAME
-             ===================================================== -->
-
+        <!-- PENALTY GAME -->
         <section id="game" class="page">
-
             <div class="page-heading">
-
                 <span class="eyebrow">MINIGAME</span>
-
-                <h1>Penalty Game ⚽</h1>
-
-                <p>
-                    Kies een plek in het doel en probeer de keeper te verslaan.
-                </p>
-
+                <h1>Penalty Game</h1>
+                <p>Kies een plek in het doel en probeer de keeper te verslaan.</p>
             </div>
-
 
             <div class="game-stats">
-
-                <div>
-                    <span>Goals</span>
-                    <strong id="score">0</strong>
-                </div>
-
-                <div>
-                    <span>Streak</span>
-                    <strong id="streak">0</strong>
-                </div>
-
-                <div>
-                    <span>Keeper</span>
-                    <strong id="keeperStatus">Klaar</strong>
-                </div>
-
+                <div><span>Goals</span><strong id="score">0</strong></div>
+                <div><span>Streak</span><strong id="streak">0</strong></div>
+                <div><span>Keeper</span><strong id="keeperStatus">Klaar</strong></div>
             </div>
 
-
             <div class="glass-card penalty-card">
-
                 <div class="goal">
-
                     <div class="goal-zone" data-zone="top-left">↖</div>
                     <div class="goal-zone" data-zone="top-center">↑</div>
                     <div class="goal-zone" data-zone="top-right">↗</div>
-
                     <div class="goal-zone" data-zone="middle-left">←</div>
                     <div class="goal-zone" data-zone="middle-center">●</div>
                     <div class="goal-zone" data-zone="middle-right">→</div>
-
                     <div class="goal-zone" data-zone="bottom-left">↙</div>
                     <div class="goal-zone" data-zone="bottom-center">↓</div>
                     <div class="goal-zone" data-zone="bottom-right">↘</div>
-
-                    <div id="keeper">🧤</div>
-
+                    <div id="keeper"></div>
                 </div>
 
-                <p id="gameMessage" class="game-message">
-                    Kies een plek om te schieten!
-                </p>
-
-                <button class="primary-button" id="resetGame">
-                    Opnieuw spelen
-                </button>
-
+                <p id="gameMessage" class="game-message">Kies een plek om te schieten.</p>
+                <button class="primary-button" id="resetGame">Opnieuw spelen</button>
             </div>
-
         </section>
-
     </main>
 
-
-    <!-- =========================================================
-         INSTELLINGEN MODAL
-         ========================================================= -->
-
+    <!-- INSTELLINGEN -->
     <div class="modal-overlay" id="settingsModal">
-
         <div class="settings-modal">
-
-            <button class="close-button" id="closeSettings">×</button>
-
+            <button class="close-button" id="closeSettings" aria-label="Sluiten">×</button>
             <span class="eyebrow">INSTELLINGEN</span>
-
             <h2>Website aanpassen</h2>
 
-
-            <!-- Thema -->
             <label for="themeSelect">Thema</label>
-
             <select id="themeSelect">
-
                 <option value="auto">Automatisch</option>
                 <option value="light">Licht</option>
                 <option value="dark">Donker</option>
-
             </select>
 
-
-            <!-- Achtergrond -->
             <label for="backgroundSelect">Achtergrond</label>
-
             <select id="backgroundSelect">
-
                 <option value="clean">Rustig</option>
                 <option value="pattern">Patroon</option>
                 <option value="animated">Geanimeerd</option>
-
             </select>
 
-
-            <!-- Naam -->
             <label for="nameInput">Naam</label>
+            <input type="text" id="nameInput" placeholder="Jouw naam">
 
-            <input
-                type="text"
-                id="nameInput"
-                placeholder="Jouw naam"
-            >
-
-
-            <!-- Stad -->
             <label for="settingsCityInput">Standaard plaats voor weer</label>
+            <input type="text" id="settingsCityInput" placeholder="Bijvoorbeeld Amsterdam">
 
-            <input
-                type="text"
-                id="settingsCityInput"
-                placeholder="Bijvoorbeeld Amsterdam"
-            >
-
-
-            <!-- Accentkleur -->
             <label>Accentkleur</label>
-
             <div class="accent-options">
-
-                <button class="accent accent-blue" data-accent="#3b82f6"></button>
-                <button class="accent accent-purple" data-accent="#8b5cf6"></button>
-                <button class="accent accent-green" data-accent="#10b981"></button>
-                <button class="accent accent-orange" data-accent="#f97316"></button>
-
+                <button class="accent accent-blue" data-accent="#3b82f6" aria-label="Blauw"></button>
+                <button class="accent accent-purple" data-accent="#8b5cf6" aria-label="Paars"></button>
+                <button class="accent accent-green" data-accent="#10b981" aria-label="Groen"></button>
+                <button class="accent accent-orange" data-accent="#f97316" aria-label="Oranje"></button>
             </div>
 
-
-            <!-- Geluid -->
             <label class="checkbox-label">
-
                 <input type="checkbox" id="soundToggle" checked>
-
                 Geluid aan
-
             </label>
-
 
             <button class="primary-button full-button" id="saveSettings">
                 Instellingen opslaan
             </button>
-
         </div>
-
     </div>
 
-
-    <!-- JavaScript-bestand -->
     <script src="script.js"></script>
-
 </body>
 </html>
